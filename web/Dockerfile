@@ -15,7 +15,8 @@ ENV WP_GRAPHQL_URL=$WP_GRAPHQL_URL \
     NEXT_TELEMETRY_DISABLED=1
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+# public/ is empty today, so a fresh clone doesn't have it; the run stage copies it.
+RUN mkdir -p public && npm run build
 
 FROM node:22-alpine AS run
 WORKDIR /app
