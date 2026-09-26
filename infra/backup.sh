@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Nightly backup: database dump + wp-content/uploads, keeping 7 days.
 #   infra/backup.sh [backup-dir]         (default: infra/backups)
-# Cron (root, since the compose commands need Docker):
-#   15 3 * * * /home/ubuntu/headless-wp-demo/infra/backup.sh >> /var/log/tagline-backup.log 2>&1
+# Scheduled nightly by a systemd timer (infra/systemd/, runs as root since compose needs Docker):
+#   sudo cp infra/systemd/tagline-backup.* /etc/systemd/system/ && sudo systemctl enable --now tagline-backup.timer
 # Restore: see "Backups" in the README.
 set -euo pipefail
+umask 077 # dumps hold password hashes
 
 cd "$(dirname "$0")"
 DIR="${1:-$PWD/backups}"

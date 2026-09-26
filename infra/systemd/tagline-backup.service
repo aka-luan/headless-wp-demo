@@ -1,0 +1,8 @@
+[Unit]
+Description=Tagline backup (database + uploads, 7 days)
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/ubuntu/headless-wp-demo/infra/backup.sh
