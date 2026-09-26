@@ -89,6 +89,19 @@ add_action('init', function () {
     remove_post_type_support('page', 'editor');
 });
 
+// Changelog entries have no page of their own, but editors still need the Preview button (it opens
+// /changelog/ in Draft Mode, drafts included). Core shows it only for viewable types, so mark the type
+// viewable and point its links at the list on the site.
+add_filter('is_post_type_viewable', function (bool $viewable, WP_Post_Type $type) {
+    return $type->name === 'changelog_entry' ? true : $viewable;
+}, 10, 2);
+add_filter('post_type_link', function (string $link, WP_Post $post) {
+    if ($post->post_type !== 'changelog_entry' || tagline_site_url() === '') {
+        return $link;
+    }
+    return tagline_site_url() . '/changelog/';
+}, 10, 2);
+
 // Everything except blog posts is edited through fields, so use the classic screen.
 // This also means fields save in the same request as the post (see revalidate webhook).
 add_filter('use_block_editor_for_post_type', function (bool $use, string $post_type) {

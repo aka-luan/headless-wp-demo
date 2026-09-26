@@ -30,6 +30,10 @@ function seed_post(string $type, string $slug, string $title, array $args = []):
     if (is_wp_error($id)) {
         WP_CLI::error("{$type} {$slug}: " . $id->get_error_message());
     }
+    // Drop unsaved editor changes (autosaves), so a reseed also resets what Preview shows.
+    while ($autosave = wp_get_post_autosave($id)) {
+        wp_delete_post_revision($autosave->ID);
+    }
     return (int) $id;
 }
 

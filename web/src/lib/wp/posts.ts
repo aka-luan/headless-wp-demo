@@ -4,17 +4,14 @@ import { cache } from "react";
 
 import { CategoryByUriDocument, PostByDocument, PostListDocument, PostUrisDocument } from "./__generated__/graphql";
 import { wpFetch } from "./client";
-import { previewIdForUri } from "./preview";
+import { previewByUri } from "./preview";
 import { normalizeUri, wpTags } from "./tags";
 import { compact } from "./utils";
 
-/** A blog post by URI (/blog/{slug}/). In Draft Mode, with its latest unsaved changes. */
+/** A blog post by URI (/blog/{slug}/). In Draft Mode, the latest version (see previewByUri). */
 export const getPost = cache(async (uri: string, preview = false) => {
   const normalized = normalizeUri(uri);
-  if (preview) {
-    const id = await previewIdForUri(normalized);
-    return id ? getPostById(id) : null;
-  }
+  if (preview) return previewByUri(normalized, getPostById);
   const data = await wpFetch(
     PostByDocument,
     { id: normalized, idType: "URI" },
@@ -23,9 +20,16 @@ export const getPost = cache(async (uri: string, preview = false) => {
   return data.post ?? null;
 });
 
-/** Draft Mode only: any post, including unpublished drafts. */
-export const getPostById = cache(async (id: number) => {
-  const data = await wpFetch(PostByDocument, { id: String(id), idType: "DATABASE_ID" }, { preview: { id } });
+/**
+ * Draft Mode only: any post, including unpublished drafts. With `overlay`, its unsaved
+ * changes (latest autosave) are applied.
+ */
+export const getPostById = cache(async (id: number, overlay = true) => {
+  const data = await wpFetch(
+    PostByDocument,
+    { id: String(id), idType: "DATABASE_ID" },
+    { preview: { overlayId: overlay ? id : undefined } },
+  );
   return data.post ?? null;
 });
 

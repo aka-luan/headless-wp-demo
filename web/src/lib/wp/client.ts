@@ -8,9 +8,9 @@ type WpFetchOptions = {
   tags?: string[];
   /**
    * Draft Mode read: authenticated with the Application Password and never cached, so drafts are
-   * visible. With `id`, WPGraphQL overlays that post's latest autosave (unsaved editor changes).
+   * visible. With `overlayId`, WPGraphQL overlays that post's latest autosave (unsaved editor changes).
    */
-  preview?: { id?: number };
+  preview?: { overlayId?: number };
 };
 
 type GraphQLResponse<T> = {
@@ -51,7 +51,7 @@ export async function wpFetch<TResult, TVariables>(
   const headers: Record<string, string> = { "content-type": "application/json" };
   if (preview) {
     headers.authorization = wpAuthHeader();
-    if (preview.id) headers["x-graphql-preview"] = `database_id=${preview.id}`;
+    if (preview.overlayId) headers["x-graphql-preview"] = `database_id=${preview.overlayId}`;
   }
 
   const res = await fetch(endpoint(), {

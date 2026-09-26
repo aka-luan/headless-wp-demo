@@ -1,11 +1,11 @@
-import { draftMode } from "next/headers";
+import { cookies, draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 
 import { matchesSecret } from "@/lib/secrets";
 import { PreviewNodeDocument } from "@/lib/wp/__generated__/graphql";
 import { wpFetch } from "@/lib/wp/client";
-import { isPreviewType } from "@/lib/wp/preview";
+import { isPreviewType, PREVIEW_ID_COOKIE } from "@/lib/wp/preview";
 
 /**
  * Target of the WordPress "Preview" button (cms/mu-plugins/preview-link.php):
@@ -39,6 +39,13 @@ export async function GET(request: NextRequest) {
   }
 
   (await draftMode()).enable();
+  // Only this post gets its unsaved changes overlaid; other pages the editor visits show saved content.
+  (await cookies()).set(PREVIEW_ID_COOKIE, String(id), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV !== "development",
+    path: "/",
+  });
 
   if (type === "changelog_entry") redirect("/changelog/");
   // Published content keeps its URL. Drafts have no URL yet (WordPress gives "/?p=123"),

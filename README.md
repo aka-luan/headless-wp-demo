@@ -119,10 +119,11 @@ case studies under `/customers/`), so the front end resolves any content by its 
   site-settings save and category edit. The route expires the matching tags immediately
   (`revalidateTag(tag, { expire: 0 })`), so the next visit renders the change: under 2 seconds locally.
 - **Preview:** the editor's Preview button opens `/api/preview/`, which checks the secret, enables
-  Draft Mode and redirects to the page. In Draft Mode, getters read with the Application Password and
-  the `X-GraphQL-Preview` header, so WPGraphQL overlays the latest autosave, including SCF fields.
+  Draft Mode and redirects to the page. In Draft Mode, getters read with the Application Password, and
+  the previewed post is fetched with the `X-GraphQL-Preview` header, so WPGraphQL overlays its latest
+  autosave (unsaved changes, SCF fields included). Other pages the editor browses show saved content.
   Never-published drafts have no URL yet and render at `/preview/{type}/{id}/` (404 outside Draft Mode).
-  Draft changelog entries show on `/changelog/`. A banner with "Exit preview" is shown on every page.
+  Draft changelog entries show on `/changelog/` (their Preview button opens it). A banner with "Exit preview" is shown on every page.
 - **SEO:** every route builds its metadata with `buildMetadata()` in `web/src/lib/seo.ts`: Yoast title and
   description, canonical and `og:url` on the site host (Yoast only knows the CMS host), full Open Graph and
   Twitter tags, robots. JSON-LD: `Organization` site-wide, `Article` on posts, `BreadcrumbList` on nested
