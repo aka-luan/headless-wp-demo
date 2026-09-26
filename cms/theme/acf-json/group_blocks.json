@@ -666,6 +666,52 @@
                     ],
                     "min": "",
                     "max": ""
+                },
+                "layout_blocks_contact_form": {
+                    "key": "layout_blocks_contact_form",
+                    "name": "contact_form",
+                    "label": "Contact form",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_contact_form_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_contact_form_intro",
+                            "label": "Intro",
+                            "name": "intro",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "intro",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_blocks_contact_form_success_message",
+                            "label": "Success message",
+                            "name": "success_message",
+                            "type": "text",
+                            "instructions": "Shown after the form is sent.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "successMessage",
+                            "default_value": "Thanks! We'll get back to you within one business day."
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
                 }
             }
         }
@@ -701,5 +747,5 @@
     "graphql_field_name": "pageBuilder",
     "map_graphql_types_from_location_rules": 1,
     "graphql_types": "",
-    "modified": 1790000000
+    "modified": 1790100000
 }

@@ -13,5 +13,6 @@ fragment PageBuilder on PageBuilder {
     ...FaqBlock
     ...CtaBlock
     ...RichTextBlock
+    ...ContactFormBlock
   }
 }

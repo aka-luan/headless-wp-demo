@@ -109,7 +109,7 @@ foreach ($planData as $order => [$slug, $name, $monthly, $yearly, $desc, $hl, $f
         'description'   => $desc,
         'features'      => array_map(fn ($f) => ['feature' => $f], $features),
         'highlighted'   => $hl ? 1 : 0,
-        'cta'           => seed_link($cta, $slug === 'business' ? '/about/' : '/pricing/'),
+        'cta'           => seed_link($cta, $slug === 'business' ? '/contact/' : '/pricing/'),
     ], $id);
     $plans[$slug] = $id;
 }
@@ -216,6 +216,7 @@ update_field('field_blocks_blocks', [
     ['acf_fc_layout' => 'cta', 'heading' => 'Start listening today', 'text' => 'Free for small teams. No credit card required.', 'cta' => seed_link('Start free', '/pricing/')],
 ], $home);
 seed_seo($home, 'Tagline collects customer feedback from every channel, tags it automatically and shows product teams what to build next.');
+update_post_meta($home, '_yoast_wpseo_title', '%%sitename%% %%sep%% %%sitedesc%%');
 
 $pricing = seed_post('page', 'pricing', 'Pricing');
 update_field('field_blocks_blocks', [
@@ -228,13 +229,13 @@ update_field('field_blocks_blocks', [
         ['question' => 'Where is my data stored?', 'answer' => 'In the EU or US, your choice. Data is encrypted at rest and in transit.'],
         ['question' => 'Do you offer discounts for non-profits?', 'answer' => 'Yes, 50% off Team and Business for registered non-profits and education.'],
     ]],
-    ['acf_fc_layout' => 'cta', 'heading' => 'Not sure which plan fits?', 'text' => 'Tell us about your team and we will suggest one.', 'cta' => seed_link('Contact us', '/about/')],
+    ['acf_fc_layout' => 'cta', 'heading' => 'Not sure which plan fits?', 'text' => 'Tell us about your team and we will suggest one.', 'cta' => seed_link('Contact us', '/contact/')],
 ], $pricing);
 seed_seo($pricing, 'Tagline pricing: free for small teams, Team at $29/month and Business at $79/month. 14-day free trial, no credit card.');
 
 $about = seed_post('page', 'about', 'About');
 update_field('field_blocks_blocks', [
-    ['acf_fc_layout' => 'hero', 'eyebrow' => 'About us', 'heading' => 'We build tools for teams who listen', 'subheading' => 'Tagline started in 2021 when three product managers got tired of losing feedback in spreadsheets.', 'primary_cta' => seed_link('See open roles', '/blog/'), 'secondary_cta' => null, 'image' => null],
+    ['acf_fc_layout' => 'hero', 'eyebrow' => 'About us', 'heading' => 'We build tools for teams who listen', 'subheading' => 'Tagline started in 2021 when three product managers got tired of losing feedback in spreadsheets.', 'primary_cta' => seed_link('See open roles', '/about/careers/'), 'secondary_cta' => null, 'image' => null],
     ['acf_fc_layout' => 'rich_text', 'content' => '<h2>Our story</h2><p>Every product team says it listens to customers, but most feedback never reaches the people who decide what to build. It sits in a support ticket, a sales call note or a Slack thread that scrolled away.</p><p>We built Tagline to fix that: one place where every request lands, gets understood and turns into a decision. Today more than 2,000 teams use it to plan their roadmaps.</p><h2>What we believe</h2><ul><li><strong>Feedback is data.</strong> Treat it with the same rigour as analytics.</li><li><strong>Close the loop.</strong> Customers who hear back trust you more.</li><li><strong>Small teams, big leverage.</strong> The best tools stay out of the way.</li></ul>'],
     ['acf_fc_layout' => 'stats', 'stats' => [['value' => '2021', 'label' => 'founded'], ['value' => '34', 'label' => 'people'], ['value' => '12', 'label' => 'countries'], ['value' => '100%', 'label' => 'remote']]],
     ['acf_fc_layout' => 'feature_split', 'heading' => 'Built in the open', 'text' => '<p>We publish our own roadmap and changelog, powered by Tagline. See what we are working on and tell us what we are missing.</p>', 'image' => $img['insights'], 'image_side' => 'left', 'cta' => seed_link('Read the changelog', '/changelog/')],
@@ -242,9 +243,36 @@ update_field('field_blocks_blocks', [
         ['quote' => 'The first tool our support and product teams both actually like.', 'name' => 'Ana Moreira', 'role' => 'Support Lead, Lumen', 'avatar' => $avatars['AM']],
         ['quote' => 'We replaced three tools and a spreadsheet with Tagline in one week.', 'name' => 'Jonah Okafor', 'role' => 'PM, Orbitly', 'avatar' => $avatars['JO']],
     ]],
-    ['acf_fc_layout' => 'cta', 'heading' => 'Want to work with us?', 'text' => 'We are hiring engineers and designers who care about craft.', 'cta' => seed_link('Get in touch', 'mailto:hello@tagline.localhost')],
+    ['acf_fc_layout' => 'cta', 'heading' => 'Want to work with us?', 'text' => 'We are hiring engineers and designers who care about craft.', 'cta' => seed_link('Get in touch', '/contact/')],
 ], $about);
 seed_seo($about, 'Tagline is a remote team of 34 people building customer-feedback tools for product teams.');
+
+// A child page, so nested URIs and breadcrumbs have something to show.
+$careers = seed_post('page', 'careers', 'Careers', ['post_parent' => $about]);
+update_field('field_blocks_blocks', [
+    ['acf_fc_layout' => 'hero', 'eyebrow' => 'Careers', 'heading' => 'Help product teams listen better', 'subheading' => 'We are a remote team of 34 across 12 countries. We hire for craft, kindness and curiosity.', 'primary_cta' => seed_link('Get in touch', '/contact/'), 'secondary_cta' => null, 'image' => null],
+    ['acf_fc_layout' => 'feature_grid', 'heading' => 'How we work', 'intro' => 'Small teams, clear ownership and plenty of time for deep work.', 'features' => [
+        ['icon' => 'users', 'title' => 'Remote first', 'text' => 'Work from anywhere within four hours of CET. We meet in person twice a year.'],
+        ['icon' => 'target', 'title' => 'Own your outcomes', 'text' => 'Teams of three to five own a product area end to end.'],
+        ['icon' => 'message', 'title' => 'Write it down', 'text' => 'Decisions live in short written docs, so nobody needs to be in every meeting.'],
+    ]],
+    ['acf_fc_layout' => 'faq', 'heading' => 'Open roles', 'questions' => [
+        ['question' => 'Senior full-stack engineer', 'answer' => 'TypeScript, Postgres and a taste for product work. Remote, EU time zones.'],
+        ['question' => 'Product designer', 'answer' => 'Own the insights area from research to pixels. Remote, EU or Americas.'],
+    ]],
+], $careers);
+seed_seo($careers, 'Join Tagline: a remote team building customer-feedback tools. See how we work and our open roles.');
+
+$contact = seed_post('page', 'contact', 'Contact');
+update_field('field_blocks_blocks', [
+    ['acf_fc_layout' => 'hero', 'eyebrow' => 'Contact', 'heading' => 'Talk to the Tagline team', 'subheading' => 'Questions about plans, security or a demo for your team? We reply within one business day.', 'primary_cta' => null, 'secondary_cta' => null, 'image' => null],
+    ['acf_fc_layout' => 'contact_form', 'heading' => 'Send us a message', 'intro' => 'Tell us a little about your team and what you need.', 'success_message' => "Thanks! We'll get back to you within one business day."],
+    ['acf_fc_layout' => 'faq', 'heading' => 'Before you write', 'questions' => [
+        ['question' => 'Do you offer demos?', 'answer' => 'Yes. Mention it in your message and we will send a few time slots.'],
+        ['question' => 'Where can I report a bug?', 'answer' => 'Use the in-app chat so we can see your workspace details.'],
+    ]],
+], $contact);
+seed_seo($contact, 'Contact the Tagline team about plans, security reviews or a demo. We reply within one business day.');
 
 update_option('show_on_front', 'page');
 update_option('page_on_front', $home);
@@ -271,6 +299,7 @@ $cats = [];
 foreach (['Product' => 'product', 'Guides' => 'guides', 'Company' => 'company'] as $name => $slug) {
     $term       = term_exists($slug, 'category') ?: wp_insert_term($name, 'category', ['slug' => $slug]);
     $cats[$slug] = (int) $term['term_id'];
+    wp_update_term($cats[$slug], 'category', ['name' => $name]);
 }
 wp_update_term(1, 'category', ['name' => 'Uncategorized', 'slug' => 'uncategorized']);
 
@@ -355,6 +384,7 @@ $menuSpec = [
         ['custom', '/changelog/', 'Changelog'],
         ['custom', '/blog/', 'Blog'],
         ['page', $about, 'About'],
+        ['page', $contact, 'Contact'],
     ]],
 ];
 $locations = get_theme_mod('nav_menu_locations', []);

@@ -6,6 +6,7 @@
  * Events are queued during the request and sent on shutdown, after SCF has saved
  * the post's fields, so Next never refetches half-saved content.
  * Payload: { type, id, uri }. Next maps it to wp:type:{type}, wp:uri:{uri}, wp:menus, wp:options.
+ * Types: the post types below, plus "menu", "options" and "category".
  */
 
 defined('ABSPATH') || exit;
@@ -22,6 +23,10 @@ final class Tagline_Revalidate
     {
         add_action('transition_post_status', [self::class, 'on_transition'], 10, 3);
         add_action('wp_update_nav_menu', fn ($menu_id) => self::push('menu', (int) $menu_id, null));
+        add_action('edited_category', function ($term_id) {
+            $link = get_term_link((int) $term_id, 'category');
+            self::push('category', (int) $term_id, is_wp_error($link) ? null : wp_make_link_relative($link));
+        });
         add_action('acf/save_post', function ($post_id) {
             if ($post_id === 'options') {
                 self::push('options', 'options', null);
@@ -76,25 +81,33 @@ final class Tagline_Revalidate
             return;
         }
 
-        $endpoint = tagline_site_url() . '/api/revalidate';
+        $endpoint = tagline_revalidate_url();
         $secret   = tagline_secret('REVALIDATE_SECRET');
+        $queue    = self::$queue;
+        self::$queue = [];
 
-        foreach (self::$queue as $event) {
-            error_log('[tagline-revalidate] ' . wp_json_encode($event) . " -> {$endpoint}");
+        // Send the editor's response first; the webhooks then run without delaying the admin.
+        // (Non-blocking wp_remote_post is not used: it gives cURL ~1ms and often never sends.)
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+
+        foreach ($queue as $event) {
             if ($secret === '' || tagline_site_url() === '') {
+                error_log('[tagline-revalidate] ' . wp_json_encode($event) . ' not sent: SITE_URL or REVALIDATE_SECRET unset');
                 continue;
             }
-            wp_remote_post($endpoint, [
-                'blocking' => false,
-                'timeout'  => 2,
-                'headers'  => [
+            $res = wp_remote_post($endpoint, [
+                'timeout' => 3,
+                'headers' => [
                     'content-type'        => 'application/json',
                     'x-revalidate-secret' => $secret,
                 ],
-                'body'     => wp_json_encode($event),
+                'body'    => wp_json_encode($event),
             ]);
+            $status = is_wp_error($res) ? $res->get_error_message() : wp_remote_retrieve_response_code($res);
+            error_log('[tagline-revalidate] ' . wp_json_encode($event) . " -> {$endpoint} ({$status})");
         }
-        self::$queue = [];
     }
 }
 

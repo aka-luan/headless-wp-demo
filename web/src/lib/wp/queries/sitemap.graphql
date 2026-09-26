@@ -1,0 +1,26 @@
+# Lists only; no per-node SEO here (see the Seo fragment note).
+query SitemapEntries {
+  pages(first: 100, where: { status: PUBLISH }) {
+    nodes {
+      uri
+      modified
+    }
+  }
+  posts(first: 100, where: { status: PUBLISH }) {
+    nodes {
+      uri
+      modified
+    }
+  }
+  caseStudies(first: 100, where: { status: PUBLISH }) {
+    nodes {
+      uri
+      modified
+    }
+  }
+  categories(first: 100, where: { hideEmpty: true }) {
+    nodes {
+      uri
+    }
+  }
+}

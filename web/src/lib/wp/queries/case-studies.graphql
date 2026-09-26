@@ -1,0 +1,57 @@
+fragment CaseStudyCard on CaseStudy {
+  id
+  title
+  uri
+  caseStudyDetails {
+    clientName
+    industry
+    summary
+    logo {
+      node {
+        ...Media
+      }
+    }
+  }
+}
+
+query CaseStudyBy($id: ID!, $idType: CaseStudyIdType!) {
+  caseStudy(id: $id, idType: $idType) {
+    databaseId
+    title
+    uri
+    featuredImage {
+      node {
+        ...Media
+      }
+    }
+    caseStudyDetails {
+      clientName
+      industry
+      summary
+      quoteAuthor
+      logo {
+        node {
+          ...Media
+        }
+      }
+      metrics {
+        value
+        label
+      }
+    }
+    pageBuilder {
+      ...PageBuilder
+    }
+    seo {
+      ...Seo
+    }
+  }
+}
+
+query CaseStudyList {
+  caseStudies(first: 100, where: { status: PUBLISH }) {
+    nodes {
+      ...CaseStudyCard
+    }
+  }
+}

@@ -1,0 +1,99 @@
+fragment PostCard on Post {
+  id
+  title
+  uri
+  date
+  excerpt
+  featuredImage {
+    node {
+      ...Media
+    }
+  }
+  categories {
+    nodes {
+      name
+      uri
+    }
+  }
+}
+
+query PostBy($id: ID!, $idType: PostIdType!) {
+  post(id: $id, idType: $idType) {
+    databaseId
+    title
+    uri
+    date
+    modified
+    content
+    excerpt
+    featuredImage {
+      node {
+        ...Media
+      }
+    }
+    author {
+      node {
+        name
+        description
+      }
+    }
+    categories {
+      nodes {
+        name
+        uri
+      }
+    }
+    seo {
+      ...Seo
+    }
+  }
+}
+
+query PostList($first: Int!) {
+  posts(first: $first, where: { status: PUBLISH }) {
+    nodes {
+      ...PostCard
+    }
+  }
+  categories(first: 50, where: { hideEmpty: true }) {
+    nodes {
+      name
+      uri
+    }
+  }
+}
+
+query CategoryByUri($uri: ID!) {
+  category(id: $uri, idType: URI) {
+    name
+    description
+    uri
+    seo {
+      ...TaxonomySeo
+    }
+    posts(first: 50, where: { status: PUBLISH }) {
+      nodes {
+        ...PostCard
+      }
+    }
+  }
+  categories(first: 50, where: { hideEmpty: true }) {
+    nodes {
+      name
+      uri
+    }
+  }
+}
+
+query PostUris {
+  posts(first: 100, where: { status: PUBLISH }) {
+    nodes {
+      uri
+    }
+  }
+  categories(first: 100, where: { hideEmpty: true }) {
+    nodes {
+      uri
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import type { PageBuilderFragment } from "@/lib/wp/__generated__/graphql";
+import { ContactForm } from "./ContactForm";
 import { Cta } from "./Cta";
 import { Faq } from "./Faq";
 import { FeatureGrid } from "./FeatureGrid";
@@ -14,11 +15,11 @@ import { Testimonials } from "./Testimonials";
 
 type Block = NonNullable<NonNullable<PageBuilderFragment["blocks"]>[number]>;
 type BlockOf<T extends Block["__typename"]> = Extract<Block, { __typename: T }>;
-type Renderer<T extends Block["__typename"]> = (block: BlockOf<T>, index: number) => ReactNode;
+type Renderer<T extends Block["__typename"]> = (block: BlockOf<T>, isFirst: boolean) => ReactNode;
 
 // Maps each WordPress layout (by GraphQL __typename) to its component.
 const registry: { [T in Block["__typename"]]: Renderer<T> } = {
-  PageBuilderBlocksHeroLayout: (b, i) => <Hero block={b} isFirst={i === 0} />,
+  PageBuilderBlocksHeroLayout: (b, isFirst) => <Hero block={b} isFirst={isFirst} />,
   PageBuilderBlocksLogoCloudLayout: (b) => <LogoCloud block={b} />,
   PageBuilderBlocksFeatureGridLayout: (b) => <FeatureGrid block={b} />,
   PageBuilderBlocksFeatureSplitLayout: (b) => <FeatureSplit block={b} />,
@@ -28,6 +29,7 @@ const registry: { [T in Block["__typename"]]: Renderer<T> } = {
   PageBuilderBlocksFaqLayout: (b) => <Faq block={b} />,
   PageBuilderBlocksCtaLayout: (b) => <Cta block={b} />,
   PageBuilderBlocksRichTextLayout: (b) => <RichTextBlock block={b} />,
+  PageBuilderBlocksContactFormLayout: (b) => <ContactForm block={b} />,
 };
 
 function UnknownBlock({ typename }: { typename: string }) {
@@ -41,7 +43,13 @@ function UnknownBlock({ typename }: { typename: string }) {
   );
 }
 
-export function Blocks({ blocks }: { blocks: PageBuilderFragment["blocks"] | undefined }) {
+type BlocksProps = {
+  blocks: PageBuilderFragment["blocks"] | undefined;
+  /** The page already renders its own h1 (e.g. a case study header), so no block is the page title. */
+  titled?: boolean;
+};
+
+export function Blocks({ blocks, titled = false }: BlocksProps) {
   return (
     <>
       {(blocks ?? []).map((block, index) => {
@@ -50,7 +58,7 @@ export function Blocks({ blocks }: { blocks: PageBuilderFragment["blocks"] | und
         if (!render) return <UnknownBlock key={index} typename={block.__typename} />;
         return (
           <div key={index} data-block={block.__typename}>
-            {render(block, index)}
+            {render(block, !titled && index === 0)}
           </div>
         );
       })}

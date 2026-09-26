@@ -1,9 +1,13 @@
-query PageByUri($uri: ID!) {
-  page(id: $uri, idType: URI) {
+# By URI for the live site; by DATABASE_ID plus the X-GraphQL-Preview header for previews.
+query PageBy($id: ID!, $idType: PageIdType!) {
+  page(id: $id, idType: $idType) {
     databaseId
     title
     uri
     isFrontPage
+    seo {
+      ...Seo
+    }
     pageBuilder {
       ...PageBuilder
     }

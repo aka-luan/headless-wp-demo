@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Blocks } from "@/components/blocks/Blocks";
+import { PageView, pageMetadata } from "@/components/content/PageView";
 import { getPage, getPageUris } from "@/lib/wp/pages";
+import { isPreview } from "@/lib/wp/preview";
 
 // Pages created in WordPress after the build are rendered on first request, then cached.
 export const dynamicParams = true;
@@ -18,16 +19,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/[[...slug]]">): Promise<Metadata> {
   const { slug } = await params;
-  const page = await getPage(uriFrom(slug));
-  if (!page) return {};
-  // Full Yoast metadata arrives in M3.
-  return page.isFrontPage ? {} : { title: page.title };
+  const page = await getPage(uriFrom(slug), await isPreview());
+  return page ? pageMetadata(page) : {};
 }
 
 export default async function Page({ params }: PageProps<"/[[...slug]]">) {
   const { slug } = await params;
-  const page = await getPage(uriFrom(slug));
+  const page = await getPage(uriFrom(slug), await isPreview());
   if (!page) notFound();
 
-  return <Blocks blocks={page.pageBuilder?.blocks} />;
+  return <PageView page={page} />;
 }

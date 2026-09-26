@@ -39,7 +39,23 @@ wp option update wpgraphql-acf_tracking_notice hide
 wp rewrite structure '/blog/%postname%/'
 wp option update category_base 'blog/category'
 
+# Yoast: titles use the same separator as the Next.js fallbacks ("Page · Tagline").
+wp option patch update wpseo_titles separator sc-middot
+wp option patch update wpseo_titles title-tax-category '%%term_title%% articles %%sep%% %%sitename%%'
+
 wp eval-file /seed/content.php
 wp rewrite flush
+# Yoast's indexables hold breadcrumb ancestors and the SEO data WPGraphQL serves.
+wp yoast index
+
+# Application Password the Next.js server uses for previews and leads (WP_APP_PASSWORD in .env).
+# WordPress shows a new password only once, so it is created on the first run only.
+if ! wp user application-password list "$WP_APP_USER" --field=name | grep -qx tagline-next; then
+  APP_PASSWORD=$(wp user application-password create "$WP_APP_USER" tagline-next --porcelain)
+  echo ""
+  echo "Application Password created. Put this in infra/.env, then run 'docker compose up -d web':"
+  echo "  WP_APP_PASSWORD=$APP_PASSWORD"
+  echo ""
+fi
 
 echo "Seed complete. Admin: $CMS_URL/wp-admin  GraphiQL: $CMS_URL/wp-admin/admin.php?page=graphiql-ide"

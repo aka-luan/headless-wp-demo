@@ -1,0 +1,21 @@
+# $stati includes drafts only in preview (authenticated requests).
+query ChangelogEntries($stati: [PostStatusEnum]) {
+  changelogEntries(first: 100, where: { stati: $stati }) {
+    nodes {
+      databaseId
+      title
+      status
+      changelogDetails {
+        version
+        releaseDate
+        body
+      }
+      changeTypes {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+}

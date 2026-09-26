@@ -35,7 +35,17 @@ docker compose run --rm seed
 ```
 
 The seed installs pinned plugin versions and the theme, sets permalinks, and loads sample content.
-It is safe to re-run. The first `up` also installs the Next.js dependencies inside the `web`
+It is safe to re-run.
+
+On the first run the seed also creates the WordPress **Application Password** that Next.js uses for
+previews and the contact form, and prints it once. Put it in `infra/.env` and recreate the web container:
+
+```bash
+# WP_APP_PASSWORD=<value printed by the seed>
+docker compose up -d web
+```
+
+If you lose it, delete `tagline-next` under Users > Profile > Application Passwords and re-run the seed. The first `up` also installs the Next.js dependencies inside the `web`
 container, which takes a minute or two (`docker compose logs -f web`).
 
 - Site (Next.js dev server): http://tagline.localhost
@@ -69,12 +79,13 @@ Editors add, remove and reorder blocks without a developer.
 | FAQ | heading, questions (question, answer) |
 | CTA | heading, text, CTA |
 | Rich text | content |
+| Contact form | heading, intro, success message |
 
 | Type | GraphQL | Route |
 |---|---|---|
 | Page | `page`, `pages` | `/`, `/[...slug]` |
-| Post | `post`, `posts` | `/blog/[slug]`, `/blog/category/[slug]` |
-| Case study | `caseStudy`, `caseStudies` (+ `blocks`) | `/customers/[slug]` |
+| Post | `post`, `posts` | `/blog`, `/blog/[slug]`, `/blog/category/[slug]` |
+| Case study | `caseStudy`, `caseStudies` (+ `blocks`) | `/customers`, `/customers/[slug]` |
 | Changelog entry | `changelogEntry`, `changelogEntries`, taxonomy `changeTypes` | `/changelog` |
 | Plan | `plan`, `plans` | used by the Pricing table block |
 | Lead | REST only (`/wp-json/wp/v2/leads`) | created by the contact form |
@@ -104,6 +115,20 @@ case studies under `/customers/`), so the front end resolves any content by its 
   component in `Blocks.tsx`.
 - **Design tokens:** colours, radii and fonts are semantic tokens in `web/src/app/globals.css`
   (`bg-surface`, `text-muted`, `bg-accent`...). Components use only those names.
+- **Live updates:** WordPress calls `/api/revalidate/` on every publish, update, unpublish, menu save,
+  site-settings save and category edit. The route expires the matching tags immediately
+  (`revalidateTag(tag, { expire: 0 })`), so the next visit renders the change: under 2 seconds locally.
+- **Preview:** the editor's Preview button opens `/api/preview/`, which checks the secret, enables
+  Draft Mode and redirects to the page. In Draft Mode, getters read with the Application Password and
+  the `X-GraphQL-Preview` header, so WPGraphQL overlays the latest autosave, including SCF fields.
+  Never-published drafts have no URL yet and render at `/preview/{type}/{id}/` (404 outside Draft Mode).
+  Draft changelog entries show on `/changelog/`. A banner with "Exit preview" is shown on every page.
+- **SEO:** every route builds its metadata with `buildMetadata()` in `web/src/lib/seo.ts`: Yoast title and
+  description, canonical and `og:url` on the site host (Yoast only knows the CMS host), full Open Graph and
+  Twitter tags, robots. JSON-LD: `Organization` site-wide, `Article` on posts, `BreadcrumbList` on nested
+  pages, posts, case studies and categories. `sitemap.xml` and `robots.txt` are generated.
+- **Contact form:** the Contact form block posts to `/api/contact/`: zod validation, a honeypot field, a
+  per-IP limit (5 per 10 minutes), an email over SMTP (Mailpit locally) and a private `lead` post in WordPress.
 - **Checks:** `docker compose exec web npm run typecheck` and `docker compose exec web npm run lint`.
 - `npm run build` clears Next's fetch cache first, so each build renders current WordPress content.
 
@@ -111,10 +136,13 @@ case studies under `/customers/`), so the front end resolves any content by its 
 
 - **Headless lock:** any front-end request on the CMS host gets a 301 to the same path on the site.
   `/wp-admin`, `/wp-login.php`, `/graphql`, `/wp-json` and static files are untouched.
-- **Revalidation webhook:** publishing, updating or unpublishing content, saving a menu, or saving
-  site settings sends `{ type, id, uri }` to `SITE_URL/api/revalidate` with an `x-revalidate-secret`
-  header. Each event is also logged (`docker compose logs wordpress | grep tagline-revalidate`).
-- **Preview:** the editor's Preview button opens `SITE_URL/api/preview?secret=…&id=…&type=…`.
+- **Revalidation webhook:** publishing, updating or unpublishing content, saving a menu, saving
+  site settings or editing a category sends `{ type, id, uri }` to `SITE_URL/api/revalidate/` with an
+  `x-revalidate-secret` header, after the editor's response has been sent. Each call is logged with its
+  result (`docker compose logs wordpress | grep tagline-revalidate`).
+- **Preview:** the editor's Preview button opens `SITE_URL/api/preview/?secret=…&id=…&type=…`. The block
+  editor's first preview (`/?p=123&preview=true` on the CMS host) is forwarded there too, for users who
+  can edit the post.
 - **GraphQL hardening:** public introspection is on only when `WP_ENVIRONMENT_TYPE` is `local` or `development`.
 
 ## Notes
@@ -131,3 +159,21 @@ case studies under `/customers/`), so the front end resolves any content by its 
 - **Zero values:** WPGraphQL for ACF returns `null` for any empty value, including `0`. A filter in
   `cms/theme/inc/fields.php` restores zeros for number fields, so the free plan's price is `0`.
 - Placeholder images are drawn at seed time (GD), so no binaries live in git.
+- **Webhook URL locally:** cURL (used by WordPress) always resolves `*.localhost` to 127.0.0.1, ignoring
+  Docker's DNS, so it can't reach `tagline.localhost`. Locally, `REVALIDATE_URL` sends the webhook straight
+  to the Next.js container. Leave it empty in production.
+- **Yoast in lists:** the WPGraphQL Yoast addon returns the first node's SEO data for every node in a list
+  query, so SEO fields are only queried on single nodes. Yoast indexables (breadcrumb ancestors) are
+  enabled on every environment (`cms/theme/inc/seo.php`); by default Yoast builds them only in production.
+- **Testing caching locally:** the dev server never caches. To test revalidation, swap it for a production
+  build that Caddy and the webhook reach as `web` (from `infra/`):
+
+  ```bash
+  docker compose stop web
+  docker compose run -d --name tagline-web-prod -e NODE_ENV=production web sh -c "npm run build && npm start -- -H 0.0.0.0"
+  docker network disconnect tagline_default tagline-web-prod
+  docker network connect --alias web tagline_default tagline-web-prod
+  # when done: docker rm -f tagline-web-prod && docker compose up -d web
+  ```
+
+  Draft Mode cookies are `Secure` in production. Browsers accept them on `http://*.localhost`; curl doesn't.

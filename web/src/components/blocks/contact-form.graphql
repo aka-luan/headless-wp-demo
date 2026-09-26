@@ -1,0 +1,5 @@
+fragment ContactFormBlock on PageBuilderBlocksContactFormLayout {
+  heading
+  intro
+  successMessage
+}

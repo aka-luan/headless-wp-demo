@@ -12,3 +12,44 @@ fragment Link on AcfLink {
   url
   target
 }
+
+# Yoast data. Only query it on single nodes: in lists, the addon returns the first node's SEO for every item.
+fragment Seo on PostTypeSEO {
+  title
+  metaDesc
+  metaRobotsNoindex
+  metaRobotsNofollow
+  opengraphTitle
+  opengraphDescription
+  opengraphType
+  opengraphPublishedTime
+  opengraphModifiedTime
+  opengraphImage {
+    ...Media
+  }
+  twitterTitle
+  twitterDescription
+  twitterImage {
+    sourceUrl
+  }
+  breadcrumbs {
+    text
+    url
+  }
+}
+
+fragment TaxonomySeo on TaxonomySEO {
+  title
+  metaDesc
+  metaRobotsNoindex
+  metaRobotsNofollow
+  opengraphTitle
+  opengraphDescription
+  opengraphImage {
+    ...Media
+  }
+  breadcrumbs {
+    text
+    url
+  }
+}

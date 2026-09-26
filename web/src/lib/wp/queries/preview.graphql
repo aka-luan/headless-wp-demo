@@ -1,0 +1,19 @@
+# Resolves what the WordPress Preview button points at. Authenticated, so drafts are visible.
+query PreviewNode($id: ID!) {
+  contentNode(id: $id, idType: DATABASE_ID) {
+    __typename
+    databaseId
+    status
+    uri
+    contentTypeName
+  }
+}
+
+# The database ID behind a URI, so a Draft Mode read can overlay that post's autosave.
+query PreviewIdByUri($uri: String!) {
+  nodeByUri(uri: $uri) {
+    ... on ContentNode {
+      databaseId
+    }
+  }
+}

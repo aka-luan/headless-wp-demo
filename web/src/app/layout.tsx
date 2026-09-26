@@ -4,7 +4,10 @@ import { Inter } from "next/font/google";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { PreviewBanner } from "@/components/layout/PreviewBanner";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/config/site";
+import { organizationJsonLd } from "@/lib/seo";
 import { getLayout } from "@/lib/wp/layout";
 import "./globals.css";
 
@@ -13,6 +16,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.name, template: `%s · ${site.name}` },
+  description: site.description,
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -27,6 +31,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         >
           Skip to content
         </a>
+        <JsonLd data={organizationJsonLd(layout.settings.socialLinks.map((l) => l.url))} />
+        <PreviewBanner />
         <AnnouncementBar announcement={layout.settings.announcement} />
         <Header nav={layout.primaryNav} cta={layout.settings.defaultCta} />
         <main id="main" className="flex-1">
