@@ -129,6 +129,11 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
   }
+
+  /* Cobalt disappears on the cobalt and ink bands (CTA, footer, stats, highlighted plan). */
+  :where(.bg-accent, .bg-inverse) :focus-visible {
+    @apply outline-tag-manila;
+  }
 }
 
 /* The hero sorter: a heap of tags flies into theme columns, once, on load. */
