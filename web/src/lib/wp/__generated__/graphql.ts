@@ -70,7 +70,7 @@ export type PageBuilderFragment = { blocks: Array<
     | { __typename: 'PageBuilderBlocksFaqLayout', heading: string | null, questions: Array<{ question: string | null, answer: string | null } | null> | null }
     | { __typename: 'PageBuilderBlocksFeatureGridLayout', heading: string | null, intro: string | null, features: Array<{ icon: Array<string | null> | null, title: string | null, text: string | null } | null> | null }
     | { __typename: 'PageBuilderBlocksFeatureSplitLayout', heading: string | null, text: string | null, imageSide: string | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null, cta: { title: string | null, url: string | null, target: string | null } | null }
-    | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
+    | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, visual: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
     | { __typename: 'PageBuilderBlocksLogoCloudLayout', heading: string | null, logos: { nodes: Array<{ sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null }> } | null }
     | { __typename: 'PageBuilderBlocksPricingTableLayout', heading: string | null, billingToggle: boolean | null, plans: { nodes: Array<
           | { id: string, title: string | null, planDetails: { monthlyPrice: number | null, yearlyPrice: number | null, description: string | null, highlighted: boolean | null, features: Array<{ feature: string | null } | null> | null, cta: { title: string | null, url: string | null, target: string | null } | null } | null }
@@ -94,7 +94,7 @@ export type FeatureGridBlockFragment = { heading: string | null, intro: string |
 
 export type FeatureSplitBlockFragment = { heading: string | null, text: string | null, imageSide: string | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null, cta: { title: string | null, url: string | null, target: string | null } | null };
 
-export type HeroBlockFragment = { eyebrow: string | null, heading: string | null, subheading: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null };
+export type HeroBlockFragment = { eyebrow: string | null, heading: string | null, subheading: string | null, visual: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null };
 
 export type LogoCloudBlockFragment = { heading: string | null, logos: { nodes: Array<{ sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null }> } | null };
 
@@ -126,7 +126,7 @@ export type CaseStudyByQuery = { caseStudy: { databaseId: number, title: string 
         | { __typename: 'PageBuilderBlocksFaqLayout', heading: string | null, questions: Array<{ question: string | null, answer: string | null } | null> | null }
         | { __typename: 'PageBuilderBlocksFeatureGridLayout', heading: string | null, intro: string | null, features: Array<{ icon: Array<string | null> | null, title: string | null, text: string | null } | null> | null }
         | { __typename: 'PageBuilderBlocksFeatureSplitLayout', heading: string | null, text: string | null, imageSide: string | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null, cta: { title: string | null, url: string | null, target: string | null } | null }
-        | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
+        | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, visual: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
         | { __typename: 'PageBuilderBlocksLogoCloudLayout', heading: string | null, logos: { nodes: Array<{ sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null }> } | null }
         | { __typename: 'PageBuilderBlocksPricingTableLayout', heading: string | null, billingToggle: boolean | null, plans: { nodes: Array<
               | { id: string, title: string | null, planDetails: { monthlyPrice: number | null, yearlyPrice: number | null, description: string | null, highlighted: boolean | null, features: Array<{ feature: string | null } | null> | null, cta: { title: string | null, url: string | null, target: string | null } | null } | null }
@@ -179,7 +179,7 @@ export type PageByQuery = { page: { databaseId: number, title: string | null, ur
         | { __typename: 'PageBuilderBlocksFaqLayout', heading: string | null, questions: Array<{ question: string | null, answer: string | null } | null> | null }
         | { __typename: 'PageBuilderBlocksFeatureGridLayout', heading: string | null, intro: string | null, features: Array<{ icon: Array<string | null> | null, title: string | null, text: string | null } | null> | null }
         | { __typename: 'PageBuilderBlocksFeatureSplitLayout', heading: string | null, text: string | null, imageSide: string | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null, cta: { title: string | null, url: string | null, target: string | null } | null }
-        | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
+        | { __typename: 'PageBuilderBlocksHeroLayout', eyebrow: string | null, heading: string | null, subheading: string | null, visual: string | null, primaryCta: { title: string | null, url: string | null, target: string | null } | null, secondaryCta: { title: string | null, url: string | null, target: string | null } | null, image: { node: { sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null } } | null }
         | { __typename: 'PageBuilderBlocksLogoCloudLayout', heading: string | null, logos: { nodes: Array<{ sourceUrl: string | null, altText: string | null, mediaDetails: { width: number | null, height: number | null } | null }> } | null }
         | { __typename: 'PageBuilderBlocksPricingTableLayout', heading: string | null, billingToggle: boolean | null, plans: { nodes: Array<
               | { id: string, title: string | null, planDetails: { monthlyPrice: number | null, yearlyPrice: number | null, description: string | null, highlighted: boolean | null, features: Array<{ feature: string | null } | null> | null, cta: { title: string | null, url: string | null, target: string | null } | null } | null }
@@ -307,6 +307,7 @@ export const HeroBlockFragmentDoc = new TypedDocumentString(`
   secondaryCta {
     ...Link
   }
+  visual
   image {
     node {
       ...Media
@@ -561,6 +562,7 @@ fragment HeroBlock on PageBuilderBlocksHeroLayout {
   secondaryCta {
     ...Link
   }
+  visual
   image {
     node {
       ...Media
@@ -870,6 +872,7 @@ fragment HeroBlock on PageBuilderBlocksHeroLayout {
   secondaryCta {
     ...Link
   }
+  visual
   image {
     node {
       ...Media
@@ -1166,6 +1169,7 @@ fragment HeroBlock on PageBuilderBlocksHeroLayout {
   secondaryCta {
     ...Link
   }
+  visual
   image {
     node {
       ...Media

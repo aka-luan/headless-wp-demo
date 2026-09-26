@@ -21,7 +21,7 @@ type Documents = {
     "fragment FaqBlock on PageBuilderBlocksFaqLayout {\n  heading\n  questions {\n    question\n    answer\n  }\n}": typeof types.FaqBlockFragmentDoc,
     "fragment FeatureGridBlock on PageBuilderBlocksFeatureGridLayout {\n  heading\n  intro\n  features {\n    icon\n    title\n    text\n  }\n}": typeof types.FeatureGridBlockFragmentDoc,
     "fragment FeatureSplitBlock on PageBuilderBlocksFeatureSplitLayout {\n  heading\n  text\n  imageSide\n  image {\n    node {\n      ...Media\n    }\n  }\n  cta {\n    ...Link\n  }\n}": typeof types.FeatureSplitBlockFragmentDoc,
-    "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  image {\n    node {\n      ...Media\n    }\n  }\n}": typeof types.HeroBlockFragmentDoc,
+    "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  visual\n  image {\n    node {\n      ...Media\n    }\n  }\n}": typeof types.HeroBlockFragmentDoc,
     "fragment LogoCloudBlock on PageBuilderBlocksLogoCloudLayout {\n  heading\n  logos {\n    nodes {\n      ...Media\n    }\n  }\n}": typeof types.LogoCloudBlockFragmentDoc,
     "fragment PricingTableBlock on PageBuilderBlocksPricingTableLayout {\n  heading\n  billingToggle\n  plans {\n    nodes {\n      ... on Plan {\n        id\n        title\n        planDetails {\n          monthlyPrice\n          yearlyPrice\n          description\n          highlighted\n          features {\n            feature\n          }\n          cta {\n            ...Link\n          }\n        }\n      }\n    }\n  }\n}": typeof types.PricingTableBlockFragmentDoc,
     "fragment RichTextBlock on PageBuilderBlocksRichTextLayout {\n  content\n}": typeof types.RichTextBlockFragmentDoc,
@@ -43,7 +43,7 @@ const documents: Documents = {
     "fragment FaqBlock on PageBuilderBlocksFaqLayout {\n  heading\n  questions {\n    question\n    answer\n  }\n}": types.FaqBlockFragmentDoc,
     "fragment FeatureGridBlock on PageBuilderBlocksFeatureGridLayout {\n  heading\n  intro\n  features {\n    icon\n    title\n    text\n  }\n}": types.FeatureGridBlockFragmentDoc,
     "fragment FeatureSplitBlock on PageBuilderBlocksFeatureSplitLayout {\n  heading\n  text\n  imageSide\n  image {\n    node {\n      ...Media\n    }\n  }\n  cta {\n    ...Link\n  }\n}": types.FeatureSplitBlockFragmentDoc,
-    "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  image {\n    node {\n      ...Media\n    }\n  }\n}": types.HeroBlockFragmentDoc,
+    "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  visual\n  image {\n    node {\n      ...Media\n    }\n  }\n}": types.HeroBlockFragmentDoc,
     "fragment LogoCloudBlock on PageBuilderBlocksLogoCloudLayout {\n  heading\n  logos {\n    nodes {\n      ...Media\n    }\n  }\n}": types.LogoCloudBlockFragmentDoc,
     "fragment PricingTableBlock on PageBuilderBlocksPricingTableLayout {\n  heading\n  billingToggle\n  plans {\n    nodes {\n      ... on Plan {\n        id\n        title\n        planDetails {\n          monthlyPrice\n          yearlyPrice\n          description\n          highlighted\n          features {\n            feature\n          }\n          cta {\n            ...Link\n          }\n        }\n      }\n    }\n  }\n}": types.PricingTableBlockFragmentDoc,
     "fragment RichTextBlock on PageBuilderBlocksRichTextLayout {\n  content\n}": types.RichTextBlockFragmentDoc,
@@ -86,7 +86,7 @@ export function graphql(source: "fragment FeatureSplitBlock on PageBuilderBlocks
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  image {\n    node {\n      ...Media\n    }\n  }\n}"): typeof import('./graphql').HeroBlockFragmentDoc;
+export function graphql(source: "fragment HeroBlock on PageBuilderBlocksHeroLayout {\n  eyebrow\n  heading\n  subheading\n  primaryCta {\n    ...Link\n  }\n  secondaryCta {\n    ...Link\n  }\n  visual\n  image {\n    node {\n      ...Media\n    }\n  }\n}"): typeof import('./graphql').HeroBlockFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

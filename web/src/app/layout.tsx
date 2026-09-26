@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Archivo } from "next/font/google";
 
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Footer } from "@/components/layout/Footer";
@@ -11,7 +11,8 @@ import { organizationJsonLd } from "@/lib/seo";
 import { getLayout } from "@/lib/wp/layout";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+// Variable in weight and width: the design uses condensed display, normal text and expanded labels.
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -23,7 +24,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const layout = await getLayout();
 
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={archivo.variable}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#main"

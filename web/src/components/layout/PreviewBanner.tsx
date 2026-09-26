@@ -5,8 +5,8 @@ export async function PreviewBanner() {
   if (!(await isPreview())) return null;
 
   return (
-    <div role="status" className="sticky top-0 z-50 bg-amber-400 text-amber-950">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-4 py-2 text-sm">
+    <div role="status" className="sticky top-0 z-50 bg-tag-manila text-fg">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-4 py-2 text-sm">
         <p>
           <strong className="font-semibold">Preview mode.</strong> You are seeing unpublished changes from WordPress.
         </p>

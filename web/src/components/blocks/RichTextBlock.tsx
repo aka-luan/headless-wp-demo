@@ -5,7 +5,9 @@ import { RichText } from "@/components/ui/RichText";
 export function RichTextBlock({ block }: { block: RichTextBlockFragment }) {
   return (
     <Section>
-      <RichText html={block.content} className="mx-auto max-w-3xl text-lg" />
+      <div className="grid lg:grid-cols-12">
+        <RichText html={block.content} className="text-lg lg:col-span-7 lg:col-start-5" />
+      </div>
     </Section>
   );
 }

@@ -7,14 +7,14 @@ export function Cta({ block }: { block: CtaBlockFragment }) {
   const cta = toLink(block.cta);
 
   return (
-    <section className="py-16 sm:py-24">
+    <section className="bg-accent py-20 text-accent-fg sm:py-28">
       <Container>
-        <div className="rounded-card bg-inverse px-6 py-14 text-center text-inverse-fg sm:px-16">
-          <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            {block.heading}
-          </h2>
-          {block.text && <p className="mx-auto mt-4 max-w-xl text-lg text-inverse-muted">{block.text}</p>}
-          {cta && <ButtonLink link={cta} size="lg" variant="inverse" className="mt-8" />}
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+          <h2 className="font-display text-display-lg lg:col-span-8">{block.heading}</h2>
+          <div className="lg:col-span-4 lg:pb-2">
+            {block.text && <p className="text-xl text-pretty text-white/85">{block.text}</p>}
+            {cta && <ButtonLink link={cta} size="lg" variant="inverse" className="mt-8" />}
+          </div>
         </div>
       </Container>
     </section>

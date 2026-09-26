@@ -8,20 +8,22 @@ export function LogoCloud({ block }: { block: LogoCloudBlockFragment }) {
   if (!logos.length) return null;
 
   return (
-    <section className="border-b border-border py-12 sm:py-16">
+    <section className="pb-16 sm:pb-20">
       <Container>
-        {block.heading && <h2 className="text-center text-sm font-medium text-subtle">{block.heading}</h2>}
-        <ul className="mt-8 grid grid-cols-2 items-center gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-6">
-          {logos.map((logo, i) => (
-            <li key={logo.sourceUrl ?? i} className="flex justify-center">
-              <WpImage
-                media={logo}
-                sizes="(min-width: 1024px) 160px, (min-width: 640px) 30vw, 45vw"
-                className="h-10 w-auto opacity-70 grayscale"
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="grid gap-6 border-t border-border pt-8 lg:grid-cols-12 lg:items-center">
+          {block.heading && <h2 className="font-label text-sm text-muted lg:col-span-3">{block.heading}</h2>}
+          <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-card bg-border sm:grid-cols-3 lg:col-span-9 lg:grid-cols-6">
+            {logos.map((logo, i) => (
+              <li key={logo.sourceUrl ?? i} className="flex h-20 items-center justify-center bg-bg px-4">
+                <WpImage
+                  media={logo}
+                  sizes="(min-width: 1024px) 140px, (min-width: 640px) 30vw, 45vw"
+                  className="h-8 w-auto"
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </Container>
     </section>
   );

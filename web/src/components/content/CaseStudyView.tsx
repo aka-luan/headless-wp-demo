@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Blocks } from "@/components/blocks/Blocks";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Container } from "@/components/ui/Container";
+import { Tag } from "@/components/ui/Tag";
 import { WpImage } from "@/components/ui/WpImage";
 import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 import type { WpCaseStudy } from "@/lib/wp/case-studies";
@@ -33,38 +34,41 @@ export function CaseStudyView({ caseStudy: cs }: { caseStudy: WpCaseStudy }) {
           { name: d?.clientName ?? cs.title ?? "", path: uri },
         ])}
       />
-      <header className="bg-gradient-to-b from-surface-accent to-bg pt-12 pb-16 sm:pt-16">
-        <Container className="max-w-4xl">
-          <Link href="/customers/" className="text-sm text-subtle hover:text-fg">
-            ← All customer stories
+      <header className="pt-12 pb-20 sm:pt-16">
+        <Container>
+          <Link href="/customers/" className="font-label text-sm text-muted underline-offset-4 hover:text-fg hover:underline">
+            All customer stories
           </Link>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <WpImage media={d?.logo?.node} sizes="160px" alt={d?.clientName ?? ""} className="h-9 w-auto" />
-            {d?.industry && (
-              <span className="rounded-full bg-bg px-3 py-1 text-xs font-medium text-muted ring-1 ring-border ring-inset">
-                {d.industry}
-              </span>
+            <WpImage media={d?.logo?.node} sizes="200px" alt={d?.clientName ?? ""} className="h-12 w-auto" />
+            {d?.industry && <Tag color="sky">{d.industry}</Tag>}
+          </div>
+          <h1 className="font-display mt-8 max-w-[20ch] text-display-lg">{cs.title}</h1>
+          <div className="mt-14 grid gap-12 lg:grid-cols-12">
+            {d?.summary && (
+              <figure className="lg:col-span-7">
+                <blockquote className="text-2xl leading-snug text-pretty sm:text-[1.75rem]">
+                  <p>
+                    <span aria-hidden className="font-display -ml-1 block h-12 text-7xl text-accent">
+                      &ldquo;
+                    </span>
+                    {d.summary}
+                  </p>
+                </blockquote>
+                {d.quoteAuthor && <figcaption className="font-label mt-6 text-sm text-muted">{d.quoteAuthor}</figcaption>}
+              </figure>
+            )}
+            {metrics.length > 0 && (
+              <dl className="grid content-start gap-6 lg:col-span-4 lg:col-start-9">
+                {metrics.map((m) => (
+                  <div key={`${m.value}-${m.label}`} className="flex flex-col gap-1 border-t-[1.5px] border-fg pt-4">
+                    <dt className="text-muted">{m.label}</dt>
+                    <dd className="font-display order-first text-display-md text-accent">{m.value}</dd>
+                  </div>
+                ))}
+              </dl>
             )}
           </div>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">{cs.title}</h1>
-          {d?.summary && (
-            <figure className="mt-10 border-l-4 border-accent pl-6">
-              <blockquote className="text-xl text-pretty text-fg sm:text-2xl">
-                <p>&ldquo;{d.summary}&rdquo;</p>
-              </blockquote>
-              {d.quoteAuthor && <figcaption className="mt-4 text-sm text-muted">{d.quoteAuthor}</figcaption>}
-            </figure>
-          )}
-          {metrics.length > 0 && (
-            <dl className="mt-12 grid gap-6 sm:grid-cols-3">
-              {metrics.map((m) => (
-                <div key={`${m.value}-${m.label}`} className="flex flex-col gap-1 rounded-card border border-border bg-bg p-6 shadow-card">
-                  <dt className="text-sm text-muted">{m.label}</dt>
-                  <dd className="order-first text-3xl font-semibold tracking-tight text-accent">{m.value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
         </Container>
       </header>
       <Blocks blocks={cs.pageBuilder?.blocks} titled />

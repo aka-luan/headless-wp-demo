@@ -1,5 +1,7 @@
 import { ImageResponse } from "next/og";
 
+import { tagMarkPath } from "@/components/layout/tag-mark";
+
 // Square logo for the Organization JSON-LD. Same mark as components/layout/Logo.tsx.
 export const dynamic = "force-static";
 
@@ -13,12 +15,12 @@ export function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#4f46e5",
+          background: "#2b3bf0",
           borderRadius: 96,
         }}
       >
-        <svg viewBox="0 0 20 20" width="300" height="300" fill="#ffffff">
-          <path d="M3 5a2 2 0 0 1 2-2h5.6a2 2 0 0 1 1.4.6l5 5a2 2 0 0 1 0 2.8l-5.6 5.6a2 2 0 0 1-2.8 0l-5-5A2 2 0 0 1 3 10.6V5Zm4 2a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+        <svg viewBox="0 0 24 24" width="320" height="320" fill="#eef0f3" style={{ transform: "rotate(-12deg)" }}>
+          <path fillRule="evenodd" d={tagMarkPath} />
         </svg>
       </div>
     ),

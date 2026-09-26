@@ -6,7 +6,7 @@ export function RichText({ html, className = "" }: { html: string | null | undef
   if (!html) return null;
   return (
     <div
-      className={`prose prose-slate max-w-none prose-a:text-accent prose-headings:tracking-tight ${className}`}
+      className={`prose max-w-none prose-tagline prose-a:text-accent prose-a:underline-offset-4 prose-headings:font-display prose-h2:text-[2.25rem] prose-h2:leading-none prose-h3:font-label prose-strong:text-fg ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

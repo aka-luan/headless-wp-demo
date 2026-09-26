@@ -77,23 +77,20 @@ foreach ([['post', 'hello-world'], ['page', 'sample-page'], ['page', 'privacy-po
 // ---------------------------------------------------------------- media
 
 WP_CLI::log('Images...');
-$img = [
-    'inbox'    => tagline_seed_image('ui-inbox', 'Tagline inbox with tagged feedback from several channels', fn () => tagline_draw_ui('inbox')),
-    'board'    => tagline_seed_image('ui-board', 'Tagline board grouping feedback by theme', fn () => tagline_draw_ui('board')),
-    'insights' => tagline_seed_image('ui-insights', 'Tagline insights chart showing request volume by theme', fn () => tagline_draw_ui('insights')),
-];
-$logoNames = ['Northwind', 'Brightpath', 'Lumen', 'Orbitly', 'Cobalt', 'Fieldnote'];
-$logos     = [];
-foreach ($logoNames as $i => $name) {
-    $logos[$name] = tagline_seed_image('logo-' . strtolower($name), "{$name} logo", fn () => tagline_draw_logo($name, $i, TAGLINE_PALETTE[$i]));
+$catalog = tagline_image_catalog();
+$seedImg = fn (string $key) => tagline_seed_image($key, ...$catalog[$key]);
+$img     = ['inbox' => $seedImg('ui-inbox'), 'board' => $seedImg('ui-board'), 'insights' => $seedImg('ui-insights')];
+$logos   = [];
+foreach (['Northwind', 'Brightpath', 'Lumen', 'Orbitly', 'Cobalt', 'Fieldnote'] as $name) {
+    $logos[$name] = $seedImg('logo-' . strtolower($name));
 }
 $avatars = [];
-foreach (['PS' => 'Priya Shah', 'DK' => 'Daniel Kim', 'AM' => 'Ana Moreira', 'JO' => 'Jonah Okafor'] as $ini => $name) {
-    $avatars[$ini] = tagline_seed_image('avatar-' . strtolower($ini), $name, fn () => tagline_draw_avatar($ini, TAGLINE_PALETTE[count($avatars) + 1]));
+foreach (['PS', 'DK', 'AM', 'JO'] as $ini) {
+    $avatars[$ini] = $seedImg('avatar-' . strtolower($ini));
 }
 $covers = [];
 for ($i = 1; $i <= 5; $i++) {
-    $covers[$i] = tagline_seed_image("cover-{$i}", 'Abstract cover illustration', fn () => tagline_draw_cover($i));
+    $covers[$i] = $seedImg("cover-{$i}");
 }
 
 // ---------------------------------------------------------------- plans
@@ -178,6 +175,7 @@ update_field('field_blocks_blocks', [
         'subheading'    => 'Tagline collects feedback from every channel, tags it automatically and shows your team which requests matter most.',
         'primary_cta'   => seed_link('Start free', '/pricing/'),
         'secondary_cta' => seed_link('Read customer stories', '/customers/'),
+        'visual'        => 'sorter',
         'image'         => $img['inbox'],
     ],
     ['acf_fc_layout' => 'logo_cloud', 'heading' => 'Trusted by product teams at', 'logos' => array_values($logos)],

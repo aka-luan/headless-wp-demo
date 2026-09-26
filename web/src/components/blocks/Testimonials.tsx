@@ -56,26 +56,34 @@ export function Testimonials({ block }: { block: TestimonialsBlockFragment }) {
   return (
     <Section tone="surface">
       <h2 className="sr-only">What customers say</h2>
-      <ul className={`grid gap-6 ${quotes.length > 1 ? "lg:grid-cols-2" : "mx-auto max-w-3xl"}`}>
+      <ul className={`grid gap-16 ${quotes.length > 1 ? "lg:grid-cols-2 lg:gap-0 lg:divide-x lg:divide-border" : "max-w-4xl"}`}>
         {quotes.map((q) => (
-          <li key={q.key} className="flex">
-            <figure className="flex w-full flex-col justify-between rounded-card border border-border bg-bg p-8 shadow-card">
-              <blockquote className="text-lg text-pretty text-fg sm:text-xl">
-                <p>&ldquo;{q.quote}&rdquo;</p>
+          <li key={q.key} className="flex lg:px-12 lg:first:pl-0 lg:last:pr-0">
+            <figure className="flex w-full flex-col justify-between">
+              <blockquote className="text-2xl leading-snug text-pretty sm:text-[1.75rem]">
+                <p>
+                  <span aria-hidden className="font-display -ml-1 block h-12 text-7xl text-accent">
+                    &ldquo;
+                  </span>
+                  {q.quote}
+                </p>
               </blockquote>
-              <figcaption className="mt-8 flex items-center gap-4">
+              <figcaption className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-border pt-6">
                 {q.imageKind === "avatar" ? (
                   <WpImage media={q.image} sizes="48px" alt="" className="size-12 rounded-full object-cover" />
                 ) : (
-                  <WpImage media={q.image} sizes="120px" alt="" className="h-8 w-auto" />
+                  <WpImage media={q.image} sizes="120px" alt="" className="h-7 w-auto" />
                 )}
                 <div className="text-sm">
-                  {q.name && <div className="font-semibold">{q.name}</div>}
+                  {q.name && <div className="font-label">{q.name}</div>}
                   {q.role && <div className="text-muted">{q.role}</div>}
                 </div>
                 {q.href && (
-                  <Link href={q.href} className="ml-auto text-sm font-medium text-accent hover:underline">
-                    Read story<span className="sr-only"> from {q.role}</span> →
+                  <Link
+                    href={q.href}
+                    className="font-label ml-auto text-sm text-accent underline decoration-1 underline-offset-4 hover:decoration-2"
+                  >
+                    Read the story<span className="sr-only"> from {q.role}</span>
                   </Link>
                 )}
               </figcaption>

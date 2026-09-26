@@ -114,7 +114,12 @@ case studies under `/customers/`), so the front end resolves any content by its 
   a `.graphql` fragment next to it, spread the fragment in `blocks.graphql`, run codegen, and register the
   component in `Blocks.tsx`.
 - **Design tokens:** colours, radii and fonts are semantic tokens in `web/src/app/globals.css`
-  (`bg-surface`, `text-muted`, `bg-accent`...). Components use only those names.
+  (`bg-surface`, `text-muted`, `bg-accent`, `bg-tag-manila`...). Components use only those names.
+  The look is a sorting table: one type family (Archivo) used at three widths (condensed display,
+  normal text, expanded labels), and paper tags (`Tag`, the `tag` utility) for anything that is a label.
+- **Hero visual:** the Hero block's *Visual* field picks an image or the feedback sorter, a CSS-only
+  animation where a heap of feedback tags flies into theme columns (`FeedbackSorter.tsx`). It needs
+  no client JavaScript and shows the sorted state when reduced motion is on.
 - **Live updates:** WordPress calls `/api/revalidate/` on every publish, update, unpublish, menu save,
   site-settings save and category edit. The route expires the matching tags immediately
   (`revalidateTag(tag, { expire: 0 })`), so the next visit renders the change: under 2 seconds locally.
@@ -213,7 +218,13 @@ curl -H "Host: cms.tagline-restore.localhost" http://127.0.0.1:8080/graphql -H "
   the post title. Changelog body is a WYSIWYG field.
 - **Zero values:** WPGraphQL for ACF returns `null` for any empty value, including `0`. A filter in
   `cms/theme/inc/fields.php` restores zeros for number fields, so the free plan's price is `0`.
-- Placeholder images are drawn at seed time (GD), so no binaries live in git.
+- Placeholder images are drawn at seed time (GD), so no binaries live in git. Wordmarks use Archivo Black,
+  downloaded at seed time; offline, they fall back to GD's bitmap font.
+- **One-off content scripts** live in `cms/ops/` and change only what they name, unlike a re-seed, which
+  resets every seeded page. Run them from `infra/` before rebuilding `web`, so the build picks up the change:
+  `docker compose run -T --rm wpcli eval-file - < ../cms/ops/<script>.php`.
+  `redraw-images.php` redraws the placeholder images in place (same attachment IDs, new file names);
+  `hero-sorter.php` switches the home hero to the feedback sorter.
 - **Webhook URL locally:** cURL (used by WordPress) always resolves `*.localhost` to 127.0.0.1, ignoring
   Docker's DNS, so it can't reach `tagline.localhost`. Locally, `REVALIDATE_URL` sends the webhook straight
   to the Next.js container. Leave it empty in production.

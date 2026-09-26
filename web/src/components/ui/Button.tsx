@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { SiteLink } from "@/lib/wp/links";
 
 const variants = {
-  primary: "bg-accent text-accent-fg hover:bg-accent-hover shadow-sm",
-  secondary: "bg-bg text-fg ring-1 ring-border ring-inset hover:bg-surface",
+  primary: "bg-accent text-accent-fg hover:bg-accent-hover",
+  secondary: "text-fg ring-[1.5px] ring-fg ring-inset hover:bg-fg hover:text-bg",
   inverse: "bg-inverse-fg text-inverse hover:bg-white",
 };
 
@@ -15,11 +15,11 @@ type ButtonLinkProps = {
   className?: string;
 };
 
-export function ButtonLink({ link, variant = "primary", size = "md", className = "" }: ButtonLinkProps) {
-  const classes = `inline-flex items-center justify-center rounded-control font-medium transition-colors ${
-    size === "lg" ? "px-5 py-3 text-base" : "px-4 py-2.5 text-sm"
-  } ${variants[variant]} ${className}`;
+export const buttonBase =
+  "font-label inline-flex items-center justify-center rounded-control transition-colors duration-150";
 
+export function ButtonLink({ link, variant = "primary", size = "md", className = "" }: ButtonLinkProps) {
+  const classes = `${buttonBase} ${size === "lg" ? "h-13 px-6 text-base" : "h-10 px-4 text-sm"} ${variants[variant]} ${className}`;
   return <SmartLink link={link} className={classes} />;
 }
 

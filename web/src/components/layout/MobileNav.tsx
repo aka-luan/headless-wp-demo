@@ -39,12 +39,12 @@ export function MobileNav({ items, cta }: { items: NavItem[]; cta: SiteLink | nu
         {isOpen ? <X aria-hidden className="size-5" /> : <Menu aria-hidden className="size-5" />}
         <span className="sr-only">{isOpen ? "Close menu" : "Open menu"}</span>
       </button>
-      <div id={panelId} hidden={!isOpen} className="absolute inset-x-0 top-16 border-b border-border bg-bg shadow-card">
-        <nav aria-label="Mobile" className="px-4 py-4">
-          <ul className="space-y-1">
+      <div id={panelId} hidden={!isOpen} className="absolute inset-x-0 top-16 h-[calc(100dvh-4rem)] overflow-y-auto border-t border-border bg-bg">
+        <nav aria-label="Mobile" className="px-4 py-6">
+          <ul className="divide-y divide-border border-y border-border">
             {items.map((item) => (
               <li key={item.id}>
-                <Link href={item.href} className="block rounded-control px-3 py-2.5 font-medium hover:bg-surface">
+                <Link href={item.href} className="font-display block py-3 text-[2.5rem] hover:text-accent">
                   {item.label}
                 </Link>
               </li>
@@ -53,7 +53,7 @@ export function MobileNav({ items, cta }: { items: NavItem[]; cta: SiteLink | nu
           {cta && (
             <Link
               href={cta.href}
-              className="mt-4 block rounded-control bg-accent px-4 py-3 text-center font-medium text-accent-fg"
+              className="font-label mt-8 flex h-13 items-center justify-center rounded-control bg-accent text-accent-fg"
             >
               {cta.label}
             </Link>

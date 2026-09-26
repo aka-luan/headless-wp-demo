@@ -4,6 +4,7 @@ import type { PricingTableBlockFragment } from "@/lib/wp/__generated__/graphql";
 import { toLink } from "@/lib/wp/links";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section, SectionHeading } from "@/components/ui/Container";
+import { Tag } from "@/components/ui/Tag";
 import { compact, hasKey } from "@/lib/wp/utils";
 import { BillingToggle } from "./BillingToggle";
 
@@ -14,9 +15,9 @@ function Price({ amount, period }: { amount: number | null | undefined; period: 
   const visibility =
     period === "monthly" ? "group-data-[billing=yearly]:hidden" : "hidden group-data-[billing=yearly]:flex";
   return (
-    <p className={`mt-6 flex items-baseline gap-1 ${visibility}`}>
-      <span className="text-4xl font-semibold tracking-tight">{usd.format(amount ?? 0)}</span>
-      <span className="text-sm text-muted">{period === "monthly" ? "/ month" : "/ month, billed yearly"}</span>
+    <p className={`mt-8 flex items-end gap-2 ${visibility}`}>
+      <span className="font-display text-7xl tabular-nums">{usd.format(amount ?? 0)}</span>
+      <span className="pb-1.5 text-sm opacity-75">{period === "monthly" ? "per month" : "per month, billed yearly"}</span>
     </p>
   );
 }
@@ -34,7 +35,7 @@ export function PricingTable({ block }: { block: PricingTableBlockFragment }) {
   );
 
   const grid = (
-    <ul className={`mt-12 grid gap-6 ${plans.length >= 3 ? "lg:grid-cols-3" : "md:grid-cols-2"}`}>
+    <ul className={`mt-10 grid gap-4 ${plans.length >= 3 ? "lg:grid-cols-3" : "md:grid-cols-2"}`}>
       {plans.map((plan) => {
         const d = plan.planDetails;
         const cta = toLink(d?.cta);
@@ -42,29 +43,36 @@ export function PricingTable({ block }: { block: PricingTableBlockFragment }) {
         return (
           <li
             key={plan.id}
-            className={`relative flex flex-col rounded-card border p-8 ${
-              highlighted ? "border-accent bg-bg shadow-card ring-1 ring-accent" : "border-border bg-bg"
+            className={`relative flex flex-col rounded-card p-8 ${
+              highlighted ? "bg-inverse text-inverse-fg shadow-card" : "border border-border bg-surface"
             }`}
           >
-            {highlighted && (
-              <p className="absolute -top-3 left-8 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-fg">
-                Most popular
-              </p>
+            <div className="flex items-center justify-between gap-4">
+              <h3 className="font-display text-4xl">{plan.title}</h3>
+              {highlighted && <Tag as="p">Most popular</Tag>}
+            </div>
+            {d?.description && (
+              <p className={`mt-3 text-sm ${highlighted ? "text-inverse-muted" : "text-muted"}`}>{d.description}</p>
             )}
-            <h3 className="text-lg font-semibold">{plan.title}</h3>
-            {d?.description && <p className="mt-2 text-sm text-muted">{d.description}</p>}
             <Price amount={d?.monthlyPrice} period="monthly" />
             {block.billingToggle && <Price amount={d?.yearlyPrice} period="yearly" />}
-            <ul className="mt-8 flex-1 space-y-3 text-sm">
+            <ul
+              className={`mt-8 flex-1 space-y-3 border-t pt-6 text-sm ${highlighted ? "border-inverse-border" : "border-border"}`}
+            >
               {compact(d?.features).map((f, i) => (
                 <li key={i} className="flex gap-3">
-                  <Check aria-hidden className="size-5 shrink-0 text-accent" />
+                  <Check aria-hidden className={`size-5 shrink-0 ${highlighted ? "text-tag-manila" : "text-accent"}`} />
                   {f.feature}
                 </li>
               ))}
             </ul>
             {cta && (
-              <ButtonLink link={cta} variant={highlighted ? "primary" : "secondary"} className="mt-8 w-full" />
+              <ButtonLink
+                link={cta}
+                size="lg"
+                variant={highlighted ? "primary" : "secondary"}
+                className="mt-10 w-full"
+              />
             )}
           </li>
         );

@@ -3,29 +3,104 @@
 
 /*
  * Design tokens. Components use only these semantic names (bg-surface, text-muted,
- * bg-accent, rounded-card...), so applying the Figma design is a change to this block.
+ * bg-accent, bg-tag-manila...), so a palette change is a change to this block.
+ *
+ * The idea: a sorting table. Cool grey paper, navy ink, a cobalt pen for actions,
+ * and coloured paper tags for anything that is a label.
  */
 @theme {
-  --color-bg: #ffffff;
-  --color-surface: #f8fafc;
-  --color-surface-accent: #eef2ff;
-  --color-fg: #0f172a;
-  --color-muted: #475569;
-  --color-subtle: #64748b;
-  --color-border: #e2e8f0;
-  --color-accent: #4f46e5;
-  --color-accent-hover: #4338ca;
+  --color-bg: #eef0f3;
+  --color-surface: #ffffff;
+  --color-surface-accent: #e3e7fd;
+  --color-fg: #111a3b;
+  --color-muted: #454c6b;
+  --color-subtle: #5d6485;
+  --color-border: #d3d8e2;
+  --color-accent: #2b3bf0;
+  --color-accent-hover: #1d29c4;
   --color-accent-fg: #ffffff;
-  --color-inverse: #0f172a;
-  --color-inverse-fg: #f8fafc;
-  --color-inverse-muted: #cbd5e1;
+  --color-inverse: #111a3b;
+  --color-inverse-fg: #eef0f3;
+  --color-inverse-muted: #aab0cc;
+  --color-inverse-border: #2c3560;
+  --color-danger: #b42318;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Paper tags. Only for things that are labels: themes, types, plans, eyebrows. */
+  --color-tag-manila: #ecd99f;
+  --color-tag-mint: #b8e8d3;
+  --color-tag-blush: #ffcad6;
+  --color-tag-sky: #c8d9ff;
 
-  --radius-card: 1rem;
-  --radius-control: 0.625rem;
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+  --radius-card: 0.375rem;
+  --radius-control: 0.25rem;
+
+  --shadow-card: 0 1px 0 rgb(17 26 59 / 0.06), 0 12px 32px -20px rgb(17 26 59 / 0.35);
+}
+
+/*
+ * One family (Archivo), three widths. Condensed and heavy for display, normal for reading,
+ * slightly expanded for labels and buttons.
+ */
+@utility font-display {
+  font-stretch: 68%;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 0.92;
+}
+
+@utility font-label {
+  font-stretch: 112%;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Display sizes: a fluid scale, so headlines fill the measure at every width. */
+@utility text-display-xl {
+  font-size: clamp(3.5rem, 11.5vw, 10.5rem);
+}
+@utility text-display-lg {
+  font-size: clamp(3rem, 8vw, 7rem);
+}
+@utility text-display-md {
+  font-size: clamp(2.5rem, 5.4vw, 4.5rem);
+}
+@utility text-display-sm {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+}
+
+/*
+ * A paper tag: a pointed left end with an eyelet punched through it.
+ * The eyelet is a mask, so whatever is behind the tag shows through.
+ */
+@utility tag {
+  --tag-point: 0.8em;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: calc(var(--tag-point) + 0.85em) 0.75em;
+  clip-path: polygon(var(--tag-point) 0, 100% 0, 100% 100%, var(--tag-point) 100%, 0 50%);
+  mask: radial-gradient(circle at calc(var(--tag-point) + 0.1em) 50%, transparent 0.2em, #000 calc(0.2em + 0.5px));
+  border-radius: 0 0.2em 0.2em 0;
+}
+
+/* Typography plugin colours, mapped to the tokens. */
+@utility prose-tagline {
+  --tw-prose-body: #2b3254;
+  --tw-prose-headings: var(--color-fg);
+  --tw-prose-lead: var(--color-muted);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-fg);
+  --tw-prose-counters: var(--color-subtle);
+  --tw-prose-bullets: var(--color-accent);
+  --tw-prose-hr: var(--color-border);
+  --tw-prose-quotes: var(--color-fg);
+  --tw-prose-quote-borders: var(--color-tag-manila);
+  --tw-prose-captions: var(--color-subtle);
+  --tw-prose-code: var(--color-fg);
+  --tw-prose-th-borders: var(--color-border);
+  --tw-prose-td-borders: var(--color-border);
 }
 
 @layer base {
@@ -36,9 +111,67 @@
 
   body {
     @apply bg-bg text-fg font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-stretch: 100%;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  ::selection {
+    @apply bg-tag-manila text-fg;
   }
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+/* The hero sorter: a heap of tags flies into theme columns, once, on load. */
+@keyframes sort-in {
+  from {
+    transform: translate(var(--from-x), var(--from-y)) rotate(var(--from-r));
+  }
+  to {
+    transform: rotate(var(--to-r));
+  }
+}
+
+@keyframes count-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+}
+
+/* Horizontal distance to the heap, in column widths plus the gap between columns. */
+.sorter-tag {
+  --from-x: calc(var(--dc-sm) * (100% + 0.75rem));
+}
+@media (min-width: 48rem) {
+  .sorter-tag {
+    --from-x: calc(var(--dc-md) * (100% + 1rem));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sorter-tag {
+    animation: sort-in 900ms cubic-bezier(0.2, 0.9, 0.25, 1.05) var(--delay) both;
+  }
+  .sorter-count {
+    animation: count-in 400ms ease-out var(--delay) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sorter-tag {
+    transform: rotate(var(--to-r));
   }
 }
