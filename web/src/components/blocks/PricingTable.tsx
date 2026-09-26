@@ -25,6 +25,14 @@ export function PricingTable({ block }: { block: PricingTableBlockFragment }) {
   const plans = compact(block.plans?.nodes).filter(hasKey("planDetails"));
   if (!plans.length) return null;
 
+  // Largest yearly discount across paid plans, e.g. "save up to 17%".
+  const savings = Math.max(
+    0,
+    ...plans.map(({ planDetails: d }) =>
+      d?.monthlyPrice && d.yearlyPrice != null ? Math.round((1 - d.yearlyPrice / d.monthlyPrice) * 100) : 0,
+    ),
+  );
+
   const grid = (
     <ul className={`mt-12 grid gap-6 ${plans.length >= 3 ? "lg:grid-cols-3" : "md:grid-cols-2"}`}>
       {plans.map((plan) => {
@@ -67,7 +75,7 @@ export function PricingTable({ block }: { block: PricingTableBlockFragment }) {
   return (
     <Section>
       <SectionHeading heading={block.heading} />
-      {block.billingToggle ? <BillingToggle>{grid}</BillingToggle> : grid}
+      {block.billingToggle ? <BillingToggle savingsPercent={savings}>{grid}</BillingToggle> : grid}
     </Section>
   );
 }

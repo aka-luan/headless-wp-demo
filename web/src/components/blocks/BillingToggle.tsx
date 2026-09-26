@@ -5,7 +5,7 @@ import { useState, type ReactNode } from "react";
 type Billing = "monthly" | "yearly";
 
 /** Monthly/yearly switch. The price cards stay server-rendered; this only flips a data attribute. */
-export function BillingToggle({ children }: { children: ReactNode }) {
+export function BillingToggle({ children, savingsPercent }: { children: ReactNode; savingsPercent: number }) {
   const [billing, setBilling] = useState<Billing>("monthly");
 
   return (
@@ -23,7 +23,7 @@ export function BillingToggle({ children }: { children: ReactNode }) {
                 billing === option ? "bg-bg text-fg shadow-sm" : "text-muted hover:text-fg"
               }`}
             >
-              {option === "monthly" ? "Monthly" : "Yearly (save ~17%)"}
+              {option === "monthly" ? "Monthly" : savingsPercent > 0 ? `Yearly (save up to ${savingsPercent}%)` : "Yearly"}
             </button>
           ))}
         </div>

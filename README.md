@@ -90,7 +90,8 @@ case studies under `/customers/`), so the front end resolves any content by its 
   `web/src/lib/wp/client.ts`, server side only. In production, responses are cached with the tags
   `wp:type:{postType}`, `wp:uri:{uri}`, `wp:menus` and `wp:options`. In development they are never cached.
 - **Types:** queries and fragments live in `.graphql` files. Types are generated from the live schema
-  and committed, so type-checks and builds don't need a running CMS. After changing a field group:
+  and committed, so type-checks don't need a running CMS. `next build` does: it prerenders pages
+  from WordPress. After changing a field group:
 
   ```bash
   docker compose exec web npm run codegen
