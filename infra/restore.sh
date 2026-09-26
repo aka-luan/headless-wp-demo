@@ -27,7 +27,7 @@ echo "Restoring wp-content..."
 
 TO_CMS=$(wp eval 'echo getenv("CMS_URL");')
 TO_SITE=$(wp eval 'echo getenv("SITE_URL");')
-if [ "$FROM_CMS" != "$TO_CMS" ]; then wp search-replace "$FROM_CMS" "$TO_CMS" --all-tables; fi
-if [ "$FROM_SITE" != "$TO_SITE" ]; then wp search-replace "$FROM_SITE" "$TO_SITE" --all-tables; fi
+if [ "$FROM_CMS" != "$TO_CMS" ]; then wp search-replace "$FROM_CMS" "$TO_CMS" --all-tables --no-report; fi
+if [ "$FROM_SITE" != "$TO_SITE" ]; then wp search-replace "$FROM_SITE" "$TO_SITE" --all-tables --no-report; fi
 wp rewrite flush
 echo "Restore complete: $TO_CMS"

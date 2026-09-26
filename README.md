@@ -19,8 +19,8 @@ cms/theme          Headless theme: CPTs, taxonomy, menus, options page
 cms/theme/acf-json Field groups as JSON (the content model, versioned in git)
 cms/mu-plugins     Headless lock, revalidation webhook, preview link, GraphQL hardening
 cms/seed           Seed script, sample content, M1 verification query
-infra              docker-compose.yml, Caddyfile, .env.example
-web                Next.js app
+infra              docker-compose.yml (+ .prod.yml), Caddyfile, nginx/, backup.sh, restore.sh, .env.example
+web                Next.js app (+ Dockerfile for production)
 ```
 
 ## Run it locally
@@ -145,6 +145,60 @@ case studies under `/customers/`), so the front end resolves any content by its 
   editor's first preview (`/?p=123&preview=true` on the CMS host) is forwarded there too, for users who
   can edit the post.
 - **GraphQL hardening:** public introspection is on only when `WP_ENVIRONMENT_TYPE` is `local` or `development`.
+
+## Production
+
+The live demo runs on one small VPS (Ubuntu 24.04, ARM64) that also hosts other sites, so host
+**nginx** owns ports 80/443 and terminates TLS (Let's Encrypt via certbot). It proxies both hosts to
+the stack's Caddy on `127.0.0.1:8080`; Caddy keeps the same routing as locally (`cms.` → php-fpm,
+site → Next.js) and trusts nginx's `X-Forwarded-*` headers, so WordPress sees HTTPS (Application
+Passwords require it) and the contact form sees the visitor's IP.
+
+```
+visitor ─HTTPS─> nginx (host) ─> Caddy :8080 ─┬─> php-fpm (WordPress) ─> MariaDB
+                                              └─> Next.js standalone (node server.js)
+```
+
+`infra/docker-compose.prod.yml` swaps the dev server for the `web/Dockerfile` standalone build,
+binds Caddy to loopback and drops the local host aliases, so containers reach both hosts through their
+public HTTPS URLs. First deploy (from `infra/`, as root or with `sudo`):
+
+```bash
+# DNS: both hosts point at the VPS. Certificate + nginx site (see infra/nginx/tagline.conf):
+certbot certonly --nginx -d tagline.example.com -d cms.tagline.example.com
+# infra/.env: production values (never committed), including
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml
+#   COMPOSE_PROFILES=            WP_ENVIRONMENT_TYPE=production     REVALIDATE_URL=
+docker compose up -d db wordpress caddy
+docker compose run --rm seed          # put the printed WP_APP_PASSWORD in .env
+docker compose build web && docker compose up -d web
+```
+
+`next build` prerenders from the live CMS, so build `web` after WordPress is up. Pages baked into the
+image are what a freshly created container serves until the next webhook, so deploy with
+`git pull && docker compose build web && docker compose up -d web`.
+
+### Backups
+
+`infra/backup.sh` dumps the database (`mariadb-dump`) and tars `wp-content/uploads` and
+`wp-content/plugins` into `infra/backups/`, keeping 7 days. A systemd timer runs it nightly at 03:15 UTC
+(`infra/systemd/`; the VPS image has no cron):
+
+```bash
+sudo cp infra/systemd/tagline-backup.* /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now tagline-backup.timer
+```
+
+`infra/restore.sh db-….sql.gz files-….tar.gz` restores a backup into the current stack and rewrites
+the production URLs to that stack's `CMS_URL`/`SITE_URL`. To check a backup without touching your
+local data, restore it into a separate compose project:
+
+```bash
+export COMPOSE="docker compose -p tagline-restore --env-file restore.env -f docker-compose.yml -f docker-compose.prod.yml"
+$COMPOSE up -d --wait db wordpress caddy
+./restore.sh ~/db-….sql.gz ~/files-….tar.gz
+curl -H "Host: cms.tagline-restore.localhost" http://127.0.0.1:8080/graphql -H "content-type: application/json"   -d '{"query":"{ posts { nodes { title } } }"}'
+```
 
 ## Notes
 
