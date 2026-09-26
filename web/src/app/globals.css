@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * Design tokens. Components use only these semantic names (bg-surface, text-muted,
+ * bg-accent, rounded-card...), so applying the Figma design is a change to this block.
+ */
+@theme {
+  --color-bg: #ffffff;
+  --color-surface: #f8fafc;
+  --color-surface-accent: #eef2ff;
+  --color-fg: #0f172a;
+  --color-muted: #475569;
+  --color-subtle: #64748b;
+  --color-border: #e2e8f0;
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-fg: #ffffff;
+  --color-inverse: #0f172a;
+  --color-inverse-fg: #f8fafc;
+  --color-inverse-muted: #cbd5e1;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}

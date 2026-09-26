@@ -1,0 +1,17 @@
+# One fragment per block, spread here. Adding a block: create its component and
+# fragment, add the spread below, run codegen, and register it in Blocks.tsx.
+fragment PageBuilder on PageBuilder {
+  blocks {
+    __typename
+    ...HeroBlock
+    ...LogoCloudBlock
+    ...FeatureGridBlock
+    ...FeatureSplitBlock
+    ...StatsBlock
+    ...TestimonialsBlock
+    ...PricingTableBlock
+    ...FaqBlock
+    ...CtaBlock
+    ...RichTextBlock
+  }
+}

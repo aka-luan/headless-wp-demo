@@ -1,0 +1,7 @@
+fragment FaqBlock on PageBuilderBlocksFaqLayout {
+  heading
+  questions {
+    question
+    answer
+  }
+}

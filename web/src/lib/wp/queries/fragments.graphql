@@ -1,0 +1,14 @@
+fragment Media on MediaItem {
+  sourceUrl
+  altText
+  mediaDetails {
+    width
+    height
+  }
+}
+
+fragment Link on AcfLink {
+  title
+  url
+  target
+}

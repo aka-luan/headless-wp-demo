@@ -9,7 +9,7 @@ marketing team can edit freely in WordPress while visitors get a fast Next.js si
 | Fields | [Secure Custom Fields](https://wordpress.org/plugins/secure-custom-fields/): Flexible Content, Repeater, Gallery, Options page |
 | API | WPGraphQL + WPGraphQL for ACF |
 | SEO | Yoast SEO + WPGraphQL Yoast SEO Addon |
-| Front end | Next.js (App Router), TypeScript, Tailwind *(milestone 2)* |
+| Front end | Next.js 16 (App Router), TypeScript strict, Tailwind CSS 4 |
 | Hosting | Docker Compose, Caddy, MariaDB |
 
 ## Repo layout
@@ -20,7 +20,7 @@ cms/theme/acf-json Field groups as JSON (the content model, versioned in git)
 cms/mu-plugins     Headless lock, revalidation webhook, preview link, GraphQL hardening
 cms/seed           Seed script, sample content, M1 verification query
 infra              docker-compose.yml, Caddyfile, .env.example
-web                Next.js app (milestone 2)
+web                Next.js app
 ```
 
 ## Run it locally
@@ -35,8 +35,10 @@ docker compose run --rm seed
 ```
 
 The seed installs pinned plugin versions and the theme, sets permalinks, and loads sample content.
-It is safe to re-run.
+It is safe to re-run. The first `up` also installs the Next.js dependencies inside the `web`
+container, which takes a minute or two (`docker compose logs -f web`).
 
+- Site (Next.js dev server): http://tagline.localhost
 - WordPress admin: http://cms.tagline.localhost/wp-admin (user `admin`, password `admin-local-only`, from `.env.example`)
 - GraphiQL IDE: http://cms.tagline.localhost/wp-admin/admin.php?page=graphiql-ide
 - GraphQL endpoint: http://cms.tagline.localhost/graphql
@@ -82,6 +84,28 @@ Editors add, remove and reorder blocks without a developer.
 WordPress URIs match the Next.js routes (`/blog/%postname%/`, category base `blog/category`,
 case studies under `/customers/`), so the front end resolves any content by its `uri`.
 
+## Front end (`web/`)
+
+- **Data layer:** every request goes through `wpFetch(query, variables, { tags })` in
+  `web/src/lib/wp/client.ts`, server side only. In production, responses are cached with the tags
+  `wp:type:{postType}`, `wp:uri:{uri}`, `wp:menus` and `wp:options`. In development they are never cached.
+- **Types:** queries and fragments live in `.graphql` files. Types are generated from the live schema
+  and committed, so type-checks and builds don't need a running CMS. After changing a field group:
+
+  ```bash
+  docker compose exec web npm run codegen
+  ```
+
+- **Blocks:** `<Blocks blocks={page.pageBuilder.blocks} />` maps each layout's `__typename` to a component
+  in `web/src/components/blocks/`. A layout the front end doesn't know yet renders nothing in production
+  and a placeholder in development. To add a block: create the layout in WordPress, add a component and
+  a `.graphql` fragment next to it, spread the fragment in `blocks.graphql`, run codegen, and register the
+  component in `Blocks.tsx`.
+- **Design tokens:** colours, radii and fonts are semantic tokens in `web/src/app/globals.css`
+  (`bg-surface`, `text-muted`, `bg-accent`...). Components use only those names.
+- **Checks:** `docker compose exec web npm run typecheck` and `docker compose exec web npm run lint`.
+- `npm run build` clears Next's fetch cache first, so each build renders current WordPress content.
+
 ## WordPress behaviour (mu-plugins)
 
 - **Headless lock:** any front-end request on the CMS host gets a 301 to the same path on the site.
@@ -94,9 +118,12 @@ case studies under `/customers/`), so the front end resolves any content by its 
 
 ## Notes
 
-- **Windows and `*.localhost`:** browsers and curl resolve `*.localhost` to 127.0.0.1, but some
-  tools (for example Node's `fetch`) don't. Either add both hosts to your hosts file, or use
-  `verify.mjs`, which connects to 127.0.0.1 itself.
+- **Windows and `*.localhost`:** browsers and curl resolve `*.localhost` to 127.0.0.1, but Node
+  doesn't. That's why the Next.js dev server runs inside Docker, where both hosts resolve to Caddy.
+  `verify.mjs` connects to 127.0.0.1 itself.
+- **Dev server file watching:** file events don't cross a Windows-to-Docker bind mount, so the Docker
+  dev server uses webpack with polling (`next dev --webpack`, `WATCHPACK_POLLING`). Production builds
+  use Next's default bundler.
 - **Field-name choices:** repeaters have block-specific names (`features`, `stats`, `questions`,
   `testimonials`) instead of a shared `items`, which keeps GraphQL type names unique. Plan name is
   the post title. Changelog body is a WYSIWYG field.

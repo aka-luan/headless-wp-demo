@@ -7,7 +7,7 @@
 node_modules/
 .next/
 out/
-web/src/gql/__generated__/
+
 
 # WordPress runtime (core lives in a Docker volume; never commit uploads or dumps)
 wp-content/uploads/

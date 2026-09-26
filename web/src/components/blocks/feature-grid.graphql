@@ -1,0 +1,9 @@
+fragment FeatureGridBlock on PageBuilderBlocksFeatureGridLayout {
+  heading
+  intro
+  features {
+    icon
+    title
+    text
+  }
+}

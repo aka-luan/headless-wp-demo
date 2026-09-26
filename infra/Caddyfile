@@ -13,6 +13,5 @@ http://{$CMS_HOST} {
 }
 
 http://{$SITE_HOST} {
-	# Replaced by reverse_proxy to the Next.js app in M2.
-	respond "Tagline web app: coming in M2" 200
+	reverse_proxy web:3000
 }

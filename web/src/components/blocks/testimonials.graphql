@@ -1,0 +1,31 @@
+fragment TestimonialsBlock on PageBuilderBlocksTestimonialsLayout {
+  source
+  caseStudies {
+    nodes {
+      ... on CaseStudy {
+        id
+        uri
+        caseStudyDetails {
+          clientName
+          summary
+          quoteAuthor
+          logo {
+            node {
+              ...Media
+            }
+          }
+        }
+      }
+    }
+  }
+  testimonials {
+    quote
+    name
+    role
+    avatar {
+      node {
+        ...Media
+      }
+    }
+  }
+}

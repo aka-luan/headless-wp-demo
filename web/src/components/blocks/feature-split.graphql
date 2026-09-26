@@ -1,0 +1,13 @@
+fragment FeatureSplitBlock on PageBuilderBlocksFeatureSplitLayout {
+  heading
+  text
+  imageSide
+  image {
+    node {
+      ...Media
+    }
+  }
+  cta {
+    ...Link
+  }
+}

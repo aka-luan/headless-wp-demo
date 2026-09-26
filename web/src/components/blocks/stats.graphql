@@ -1,0 +1,6 @@
+fragment StatsBlock on PageBuilderBlocksStatsLayout {
+  stats {
+    value
+    label
+  }
+}

@@ -1,0 +1,42 @@
+query Layout {
+  generalSettings {
+    title
+    description
+  }
+  globals {
+    siteSettings {
+      announcementEnabled
+      announcementText
+      announcementLink {
+        ...Link
+      }
+      footerText
+      socialLinks {
+        network
+        url
+      }
+      defaultCta {
+        ...Link
+      }
+    }
+  }
+  primaryMenu: menuItems(where: { location: PRIMARY }, first: 50) {
+    nodes {
+      ...MenuItem
+    }
+  }
+  footerMenu: menuItems(where: { location: FOOTER }, first: 50) {
+    nodes {
+      ...MenuItem
+    }
+  }
+}
+
+fragment MenuItem on MenuItem {
+  id
+  label
+  url
+  path
+  target
+  parentId
+}

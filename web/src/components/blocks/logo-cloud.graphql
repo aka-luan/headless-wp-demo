@@ -1,0 +1,8 @@
+fragment LogoCloudBlock on PageBuilderBlocksLogoCloudLayout {
+  heading
+  logos {
+    nodes {
+      ...Media
+    }
+  }
+}

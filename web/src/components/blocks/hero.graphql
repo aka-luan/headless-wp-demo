@@ -1,0 +1,16 @@
+fragment HeroBlock on PageBuilderBlocksHeroLayout {
+  eyebrow
+  heading
+  subheading
+  primaryCta {
+    ...Link
+  }
+  secondaryCta {
+    ...Link
+  }
+  image {
+    node {
+      ...Media
+    }
+  }
+}

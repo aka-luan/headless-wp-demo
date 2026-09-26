@@ -1,0 +1,24 @@
+fragment PricingTableBlock on PageBuilderBlocksPricingTableLayout {
+  heading
+  billingToggle
+  plans {
+    nodes {
+      ... on Plan {
+        id
+        title
+        planDetails {
+          monthlyPrice
+          yearlyPrice
+          description
+          highlighted
+          features {
+            feature
+          }
+          cta {
+            ...Link
+          }
+        }
+      }
+    }
+  }
+}

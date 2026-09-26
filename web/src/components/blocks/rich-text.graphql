@@ -1,0 +1,3 @@
+fragment RichTextBlock on PageBuilderBlocksRichTextLayout {
+  content
+}

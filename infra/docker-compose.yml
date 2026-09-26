@@ -84,6 +84,36 @@ services:
     <<: *wpcli
     entrypoint: ["sh", "/seed/seed.sh"]
 
+  # Next.js dev server (hot reload). Runs in Docker so *.localhost hosts resolve through Caddy.
+  web:
+    image: node:22-alpine
+    profiles: [dev]
+    working_dir: /app
+    command: sh -c "npm install --no-audit --no-fund && npm run dev -- --webpack --hostname 0.0.0.0"
+    restart: unless-stopped
+    depends_on: [caddy]
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: 1
+      WATCHPACK_POLLING: "true" # bind-mounted source on Windows emits no file events
+      SITE_URL: ${SITE_URL}
+      WP_GRAPHQL_URL: ${WP_GRAPHQL_URL}
+      WP_APP_USER: ${WP_APP_USER}
+      WP_APP_PASSWORD: ${WP_APP_PASSWORD}
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET}
+      PREVIEW_SECRET: ${PREVIEW_SECRET}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      CONTACT_TO: ${CONTACT_TO}
+      # Media is fetched from the CMS over the private Docker network.
+      IMAGES_ALLOW_LOCAL_IP: "true"
+    volumes:
+      - ../web:/app
+      - web_node_modules:/app/node_modules # Linux deps, separate from any host install
+      - web_next:/app/.next
+
   caddy:
     image: caddy:2
     restart: unless-stopped
@@ -116,6 +146,8 @@ services:
       - "8025:8025" # web UI; SMTP on mailpit:1025 inside the network
 
 volumes:
+  web_node_modules:
+  web_next:
   db_data:
   wp_core:
   caddy_data:

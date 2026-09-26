@@ -1,0 +1,7 @@
+fragment CtaBlock on PageBuilderBlocksCtaLayout {
+  heading
+  text
+  cta {
+    ...Link
+  }
+}
