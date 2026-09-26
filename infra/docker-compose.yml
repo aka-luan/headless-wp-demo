@@ -50,6 +50,12 @@ services:
         condition: service_healthy
     environment: *wp-env
     volumes: *wp-volumes
+    healthcheck:
+      # The entrypoint copies core and writes wp-config.php on first start; WP-CLI needs both.
+      test: ["CMD", "test", "-f", "/var/www/html/wp-config.php"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
 
   # One-off WP-CLI runner: docker compose run --rm wpcli <command>
   wpcli: &wpcli
@@ -58,7 +64,7 @@ services:
     user: "33:33" # match www-data in the Debian-based wordpress image
     entrypoint: ["docker-entrypoint.sh", "wp"]
     depends_on:
-      db:
+      wordpress:
         condition: service_healthy
     environment:
       <<: *wp-env
