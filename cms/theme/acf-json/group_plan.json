@@ -1,0 +1,117 @@
+{
+    "key": "group_plan",
+    "title": "Plan details",
+    "fields": [
+        {
+            "key": "field_plan_monthly_price",
+            "label": "Monthly price (USD)",
+            "name": "monthly_price",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "monthlyPrice",
+            "min": 0
+        },
+        {
+            "key": "field_plan_yearly_price",
+            "label": "Yearly price (USD / month, billed yearly)",
+            "name": "yearly_price",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "yearlyPrice",
+            "min": 0
+        },
+        {
+            "key": "field_plan_description",
+            "label": "Short description",
+            "name": "description",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "description",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_plan_features",
+            "label": "Features",
+            "name": "features",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "features",
+            "layout": "table",
+            "button_label": "Add feature",
+            "sub_fields": [
+                {
+                    "key": "field_plan_features_feature",
+                    "label": "Feature",
+                    "name": "feature",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "show_in_graphql": 1,
+                    "graphql_field_name": "feature"
+                }
+            ]
+        },
+        {
+            "key": "field_plan_highlighted",
+            "label": "Highlighted",
+            "name": "highlighted",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "highlighted",
+            "ui": 1,
+            "default_value": 0
+        },
+        {
+            "key": "field_plan_cta",
+            "label": "CTA",
+            "name": "cta",
+            "type": "link",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "cta",
+            "return_format": "array"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "plan"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "planDetails",
+    "map_graphql_types_from_location_rules": 1,
+    "graphql_types": "",
+    "modified": 1790000000
+}

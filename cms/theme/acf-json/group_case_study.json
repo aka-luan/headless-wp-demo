@@ -1,0 +1,126 @@
+{
+    "key": "group_case_study",
+    "title": "Case study details",
+    "fields": [
+        {
+            "key": "field_case_study_client_name",
+            "label": "Client name",
+            "name": "client_name",
+            "type": "text",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "clientName"
+        },
+        {
+            "key": "field_case_study_industry",
+            "label": "Industry",
+            "name": "industry",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "industry"
+        },
+        {
+            "key": "field_case_study_logo",
+            "label": "Logo",
+            "name": "logo",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "logo",
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all"
+        },
+        {
+            "key": "field_case_study_summary",
+            "label": "Summary",
+            "name": "summary",
+            "type": "textarea",
+            "instructions": "Also used as the quote when this case study appears in a Testimonials block.",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "summary",
+            "rows": 3,
+            "new_lines": ""
+        },
+        {
+            "key": "field_case_study_quote_author",
+            "label": "Quote author",
+            "name": "quote_author",
+            "type": "text",
+            "instructions": "Name and role shown under the summary quote, e.g. \"Priya Shah, Head of Product\".",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "quoteAuthor"
+        },
+        {
+            "key": "field_case_study_metrics",
+            "label": "Metrics",
+            "name": "metrics",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "metrics",
+            "layout": "table",
+            "button_label": "Add metric",
+            "sub_fields": [
+                {
+                    "key": "field_case_study_metrics_value",
+                    "label": "Value",
+                    "name": "value",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "show_in_graphql": 1,
+                    "graphql_field_name": "value"
+                },
+                {
+                    "key": "field_case_study_metrics_label",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "show_in_graphql": 1,
+                    "graphql_field_name": "label"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "case_study"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "caseStudyDetails",
+    "map_graphql_types_from_location_rules": 1,
+    "graphql_types": "",
+    "modified": 1790000000
+}

@@ -1,0 +1,705 @@
+{
+    "key": "group_blocks",
+    "title": "Page blocks",
+    "fields": [
+        {
+            "key": "field_blocks_blocks",
+            "label": "Blocks",
+            "name": "blocks",
+            "type": "flexible_content",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "show_in_graphql": 1,
+            "graphql_field_name": "blocks",
+            "button_label": "Add block",
+            "layouts": {
+                "layout_blocks_hero": {
+                    "key": "layout_blocks_hero",
+                    "name": "hero",
+                    "label": "Hero",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_hero_eyebrow",
+                            "label": "Eyebrow",
+                            "name": "eyebrow",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "eyebrow"
+                        },
+                        {
+                            "key": "field_blocks_hero_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_hero_subheading",
+                            "label": "Subheading",
+                            "name": "subheading",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "subheading",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_blocks_hero_primary_cta",
+                            "label": "Primary CTA",
+                            "name": "primary_cta",
+                            "type": "link",
+                            "instructions": "Link text is the button label.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "primaryCta",
+                            "return_format": "array"
+                        },
+                        {
+                            "key": "field_blocks_hero_secondary_cta",
+                            "label": "Secondary CTA",
+                            "name": "secondary_cta",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "secondaryCta",
+                            "return_format": "array"
+                        },
+                        {
+                            "key": "field_blocks_hero_image",
+                            "label": "Image",
+                            "name": "image",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "image",
+                            "return_format": "array",
+                            "preview_size": "medium",
+                            "library": "all"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_logo_cloud": {
+                    "key": "layout_blocks_logo_cloud",
+                    "name": "logo_cloud",
+                    "label": "Logo cloud",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_logo_cloud_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_logo_cloud_logos",
+                            "label": "Logos",
+                            "name": "logos",
+                            "type": "gallery",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "logos",
+                            "return_format": "array",
+                            "preview_size": "medium",
+                            "library": "all"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_feature_grid": {
+                    "key": "layout_blocks_feature_grid",
+                    "name": "feature_grid",
+                    "label": "Feature grid",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_feature_grid_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_feature_grid_intro",
+                            "label": "Intro",
+                            "name": "intro",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "intro",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_blocks_feature_grid_features",
+                            "label": "Items",
+                            "name": "features",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "features",
+                            "layout": "block",
+                            "button_label": "Add feature",
+                            "sub_fields": [
+                                {
+                                    "key": "field_blocks_feature_grid_features_icon",
+                                    "label": "Icon",
+                                    "name": "icon",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "icon",
+                                    "choices": {
+                                        "inbox": "Inbox",
+                                        "tag": "Tag",
+                                        "chart": "Chart",
+                                        "users": "Users",
+                                        "zap": "Zap",
+                                        "message": "Message",
+                                        "sparkles": "Sparkles",
+                                        "shield": "Shield",
+                                        "link": "Link",
+                                        "target": "Target"
+                                    },
+                                    "return_format": "value",
+                                    "ui": 0,
+                                    "default_value": "sparkles"
+                                },
+                                {
+                                    "key": "field_blocks_feature_grid_features_title",
+                                    "label": "Title",
+                                    "name": "title",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "title"
+                                },
+                                {
+                                    "key": "field_blocks_feature_grid_features_text",
+                                    "label": "Text",
+                                    "name": "text",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "text",
+                                    "rows": 3,
+                                    "new_lines": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_feature_split": {
+                    "key": "layout_blocks_feature_split",
+                    "name": "feature_split",
+                    "label": "Feature split",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_feature_split_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_feature_split_text",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "text",
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 1
+                        },
+                        {
+                            "key": "field_blocks_feature_split_image",
+                            "label": "Image",
+                            "name": "image",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "image",
+                            "return_format": "array",
+                            "preview_size": "medium",
+                            "library": "all"
+                        },
+                        {
+                            "key": "field_blocks_feature_split_image_side",
+                            "label": "Image side",
+                            "name": "image_side",
+                            "type": "button_group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "imageSide",
+                            "choices": {
+                                "left": "Left",
+                                "right": "Right"
+                            },
+                            "return_format": "value",
+                            "layout": "horizontal",
+                            "default_value": "right"
+                        },
+                        {
+                            "key": "field_blocks_feature_split_cta",
+                            "label": "CTA",
+                            "name": "cta",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cta",
+                            "return_format": "array"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_stats": {
+                    "key": "layout_blocks_stats",
+                    "name": "stats",
+                    "label": "Stats",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_stats_stats",
+                            "label": "Items",
+                            "name": "stats",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "stats",
+                            "layout": "table",
+                            "button_label": "Add stat",
+                            "sub_fields": [
+                                {
+                                    "key": "field_blocks_stats_stats_value",
+                                    "label": "Value",
+                                    "name": "value",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "value"
+                                },
+                                {
+                                    "key": "field_blocks_stats_stats_label",
+                                    "label": "Label",
+                                    "name": "label",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "label"
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_testimonials": {
+                    "key": "layout_blocks_testimonials",
+                    "name": "testimonials",
+                    "label": "Testimonials",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_testimonials_source",
+                            "label": "Source",
+                            "name": "source",
+                            "type": "button_group",
+                            "instructions": "Pull quotes from case studies, or type them in.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "source",
+                            "choices": {
+                                "case_studies": "Case studies",
+                                "manual": "Manual"
+                            },
+                            "return_format": "value",
+                            "layout": "horizontal",
+                            "default_value": "case_studies"
+                        },
+                        {
+                            "key": "field_blocks_testimonials_case_studies",
+                            "label": "Case studies",
+                            "name": "case_studies",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_blocks_testimonials_source",
+                                        "operator": "==",
+                                        "value": "case_studies"
+                                    }
+                                ]
+                            ],
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "caseStudies",
+                            "post_type": [
+                                "case_study"
+                            ],
+                            "filters": [
+                                "search"
+                            ],
+                            "return_format": "object",
+                            "elements": []
+                        },
+                        {
+                            "key": "field_blocks_testimonials_testimonials",
+                            "label": "Items",
+                            "name": "testimonials",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_blocks_testimonials_source",
+                                        "operator": "==",
+                                        "value": "manual"
+                                    }
+                                ]
+                            ],
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "testimonials",
+                            "layout": "block",
+                            "button_label": "Add testimonial",
+                            "sub_fields": [
+                                {
+                                    "key": "field_blocks_testimonials_testimonials_quote",
+                                    "label": "Quote",
+                                    "name": "quote",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "quote",
+                                    "rows": 3,
+                                    "new_lines": ""
+                                },
+                                {
+                                    "key": "field_blocks_testimonials_testimonials_name",
+                                    "label": "Name",
+                                    "name": "name",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "name"
+                                },
+                                {
+                                    "key": "field_blocks_testimonials_testimonials_role",
+                                    "label": "Role",
+                                    "name": "role",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "role"
+                                },
+                                {
+                                    "key": "field_blocks_testimonials_testimonials_avatar",
+                                    "label": "Avatar",
+                                    "name": "avatar",
+                                    "type": "image",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "avatar",
+                                    "return_format": "array",
+                                    "preview_size": "medium",
+                                    "library": "all"
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_pricing_table": {
+                    "key": "layout_blocks_pricing_table",
+                    "name": "pricing_table",
+                    "label": "Pricing table",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_pricing_table_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_pricing_table_plans",
+                            "label": "Plans",
+                            "name": "plans",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "plans",
+                            "post_type": [
+                                "plan"
+                            ],
+                            "filters": [
+                                "search"
+                            ],
+                            "return_format": "object",
+                            "elements": []
+                        },
+                        {
+                            "key": "field_blocks_pricing_table_billing_toggle",
+                            "label": "Billing toggle",
+                            "name": "billing_toggle",
+                            "type": "true_false",
+                            "instructions": "Show the monthly / yearly switch.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "billingToggle",
+                            "ui": 1,
+                            "default_value": 1
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_faq": {
+                    "key": "layout_blocks_faq",
+                    "name": "faq",
+                    "label": "FAQ",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_faq_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_faq_questions",
+                            "label": "Items",
+                            "name": "questions",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "questions",
+                            "layout": "block",
+                            "button_label": "Add question",
+                            "sub_fields": [
+                                {
+                                    "key": "field_blocks_faq_questions_question",
+                                    "label": "Question",
+                                    "name": "question",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "question"
+                                },
+                                {
+                                    "key": "field_blocks_faq_questions_answer",
+                                    "label": "Answer",
+                                    "name": "answer",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "show_in_graphql": 1,
+                                    "graphql_field_name": "answer",
+                                    "rows": 3,
+                                    "new_lines": ""
+                                }
+                            ]
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_cta": {
+                    "key": "layout_blocks_cta",
+                    "name": "cta",
+                    "label": "CTA",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_cta_heading",
+                            "label": "Heading",
+                            "name": "heading",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "heading"
+                        },
+                        {
+                            "key": "field_blocks_cta_text",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "text",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_blocks_cta_cta",
+                            "label": "CTA",
+                            "name": "cta",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "cta",
+                            "return_format": "array"
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_blocks_rich_text": {
+                    "key": "layout_blocks_rich_text",
+                    "name": "rich_text",
+                    "label": "Rich text",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_blocks_rich_text_content",
+                            "label": "Content",
+                            "name": "content",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "show_in_graphql": 1,
+                            "graphql_field_name": "content",
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 1
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                }
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "case_study"
+            }
+        ]
+    ],
+    "menu_order": 10,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "the_content"
+    ],
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "pageBuilder",
+    "map_graphql_types_from_location_rules": 1,
+    "graphql_types": "",
+    "modified": 1790000000
+}

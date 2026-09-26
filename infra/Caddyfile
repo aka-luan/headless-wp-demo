@@ -1,0 +1,18 @@
+# Local dev serves plain HTTP on *.localhost. In production, drop the
+# "http://" prefixes and the global options so Caddy issues certificates.
+{
+	auto_https off
+	admin off
+}
+
+http://{$CMS_HOST} {
+	root * /var/www/html
+	encode zstd gzip
+	php_fastcgi wordpress:9000
+	file_server
+}
+
+http://{$SITE_HOST} {
+	# Replaced by reverse_proxy to the Next.js app in M2.
+	respond "Tagline web app: coming in M2" 200
+}

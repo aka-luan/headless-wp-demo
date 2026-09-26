@@ -1,0 +1,7 @@
+/*
+Theme Name: Tagline Headless
+Description: Headless theme. No front-end templates; the site is rendered by Next.js. Holds the content model (CPTs, ACF/SCF field groups in acf-json).
+Version: 0.1.0
+Requires PHP: 8.1
+Text Domain: tagline
+*/

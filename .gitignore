@@ -1,0 +1,22 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies / builds
+node_modules/
+.next/
+out/
+web/src/gql/__generated__/
+
+# WordPress runtime (core lives in a Docker volume; never commit uploads or dumps)
+wp-content/uploads/
+*.sql
+*.sql.gz
+backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

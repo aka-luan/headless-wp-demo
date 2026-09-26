@@ -1,0 +1,126 @@
+# M1 check: every content type and every block field in the model.
+# Run: node cms/seed/verify.mjs   (or paste into GraphiQL in wp-admin)
+
+fragment Img on AcfMediaItemConnectionEdge {
+  node { sourceUrl altText mediaDetails { width height } }
+}
+fragment Lnk on AcfLink { title url target }
+
+fragment Blocks on PageBuilder {
+  blocks {
+    __typename
+    ... on PageBuilderBlocksHeroLayout {
+      eyebrow heading subheading
+      primaryCta { ...Lnk } secondaryCta { ...Lnk }
+      image { ...Img }
+    }
+    ... on PageBuilderBlocksLogoCloudLayout {
+      heading
+      logos { nodes { sourceUrl altText } }
+    }
+    ... on PageBuilderBlocksFeatureGridLayout {
+      heading intro
+      features { icon title text }
+    }
+    ... on PageBuilderBlocksFeatureSplitLayout {
+      heading text imageSide
+      image { ...Img }
+      cta { ...Lnk }
+    }
+    ... on PageBuilderBlocksStatsLayout {
+      stats { value label }
+    }
+    ... on PageBuilderBlocksTestimonialsLayout {
+      source
+      caseStudies {
+        nodes {
+          ... on CaseStudy {
+            uri
+            caseStudyDetails { clientName summary quoteAuthor logo { ...Img } }
+          }
+        }
+      }
+      testimonials { quote name role avatar { ...Img } }
+    }
+    ... on PageBuilderBlocksPricingTableLayout {
+      heading billingToggle
+      plans {
+        nodes {
+          ... on Plan {
+            title
+            planDetails { monthlyPrice yearlyPrice description highlighted features { feature } cta { ...Lnk } }
+          }
+        }
+      }
+    }
+    ... on PageBuilderBlocksFaqLayout {
+      heading
+      questions { question answer }
+    }
+    ... on PageBuilderBlocksCtaLayout {
+      heading text
+      cta { ...Lnk }
+    }
+    ... on PageBuilderBlocksRichTextLayout {
+      content
+    }
+  }
+}
+
+query VerifyM1 {
+  pages(first: 20) {
+    nodes {
+      title uri isFrontPage
+      seo { title metaDesc canonical opengraphTitle }
+      pageBuilder { ...Blocks }
+    }
+  }
+  posts(first: 20) {
+    nodes {
+      title uri date excerpt content
+      author { node { name } }
+      categories { nodes { name uri } }
+      featuredImage { node { sourceUrl altText } }
+      seo { title metaDesc }
+    }
+  }
+  categories(where: { hideEmpty: true }) { nodes { name uri count } }
+  caseStudies(first: 20) {
+    nodes {
+      title uri
+      featuredImage { node { sourceUrl } }
+      caseStudyDetails {
+        clientName industry summary quoteAuthor
+        logo { ...Img }
+        metrics { value label }
+      }
+      pageBuilder { ...Blocks }
+    }
+  }
+  plans(first: 20, where: { orderby: { field: MENU_ORDER, order: ASC } }) {
+    nodes {
+      title menuOrder
+      planDetails { monthlyPrice yearlyPrice description highlighted features { feature } cta { ...Lnk } }
+    }
+  }
+  changelogEntries(first: 20) {
+    nodes {
+      title
+      changelogDetails { version releaseDate body }
+      changeTypes { nodes { name slug } }
+    }
+  }
+  changeTypes { nodes { name slug } }
+  globals {
+    siteSettings {
+      announcementEnabled announcementText
+      announcementLink { ...Lnk }
+      footerText
+      socialLinks { network url }
+      defaultCta { ...Lnk }
+    }
+  }
+  primary: menuItems(where: { location: PRIMARY }) { nodes { label uri path } }
+  footer: menuItems(where: { location: FOOTER }) { nodes { label uri path } }
+  generalSettings { title description }
+}

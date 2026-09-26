@@ -1,0 +1,116 @@
+# Tagline: headless WordPress + Next.js
+# Local:  cd infra && cp .env.example .env && docker compose up -d
+# Seed:   docker compose run --rm seed
+name: tagline
+
+x-wp-env: &wp-env
+  WORDPRESS_DB_HOST: db
+  WORDPRESS_DB_NAME: ${DB_NAME}
+  WORDPRESS_DB_USER: ${DB_USER}
+  WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+  WORDPRESS_CONFIG_EXTRA: |
+    define('WP_HOME', getenv('CMS_URL'));
+    define('WP_SITEURL', getenv('CMS_URL'));
+    define('WP_ENVIRONMENT_TYPE', getenv('WP_ENVIRONMENT_TYPE') ?: 'production');
+    define('DISALLOW_FILE_EDIT', true);
+  WP_ENVIRONMENT_TYPE: ${WP_ENVIRONMENT_TYPE:-production}
+  CMS_URL: ${CMS_URL}
+  SITE_URL: ${SITE_URL}
+  REVALIDATE_SECRET: ${REVALIDATE_SECRET}
+  PREVIEW_SECRET: ${PREVIEW_SECRET}
+
+x-wp-volumes: &wp-volumes
+  - wp_core:/var/www/html
+  - ../cms/theme:/var/www/html/wp-content/themes/tagline
+  - ../cms/mu-plugins:/var/www/html/wp-content/mu-plugins
+  - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  wordpress:
+    image: wordpress:php8.3-fpm # latest WordPress core
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment: *wp-env
+    volumes: *wp-volumes
+
+  # One-off WP-CLI runner: docker compose run --rm wpcli <command>
+  wpcli: &wpcli
+    image: wordpress:cli-php8.3
+    profiles: [tools]
+    user: "33:33" # match www-data in the Debian-based wordpress image
+    entrypoint: ["docker-entrypoint.sh", "wp"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      <<: *wp-env
+      WP_ADMIN_USER: ${WP_ADMIN_USER}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+      BRAND_NAME: ${BRAND_NAME}
+      WP_CLI_CACHE_DIR: /tmp/wp-cli-cache
+    volumes:
+      - wp_core:/var/www/html
+      - ../cms/theme:/var/www/html/wp-content/themes/tagline
+      - ../cms/mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ../cms/seed:/seed:ro
+
+  # Installs plugins and loads sample content: docker compose run --rm seed
+  seed:
+    <<: *wpcli
+    entrypoint: ["sh", "/seed/seed.sh"]
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [wordpress]
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      SITE_HOST: ${SITE_HOST}
+      CMS_HOST: ${CMS_HOST}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - wp_core:/var/www/html:ro
+      - ../cms/theme:/var/www/html/wp-content/themes/tagline:ro
+      - ../cms/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      default:
+        # Containers reach both hosts through Caddy (WP -> Next webhook, Next -> GraphQL).
+        aliases:
+          - ${SITE_HOST}
+          - ${CMS_HOST}
+
+  mailpit:
+    image: axllent/mailpit:latest
+    profiles: [dev]
+    restart: unless-stopped
+    ports:
+      - "8025:8025" # web UI; SMTP on mailpit:1025 inside the network
+
+volumes:
+  db_data:
+  wp_core:
+  caddy_data:
+  caddy_config:
