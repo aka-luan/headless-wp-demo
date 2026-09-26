@@ -40,8 +40,12 @@ wp rewrite structure '/blog/%postname%/'
 wp option update category_base 'blog/category'
 
 # Yoast: titles use the same separator as the Next.js fallbacks ("Page · Tagline").
-wp option patch update wpseo_titles separator sc-middot
-wp option patch update wpseo_titles title-tax-category '%%term_title%% articles %%sep%% %%sitename%%'
+# On a fresh install Yoast hasn't stored these keys yet, so insert them when update finds nothing.
+yoast_title() {
+  wp option patch update wpseo_titles "$1" "$2" 2>/dev/null || wp option patch insert wpseo_titles "$1" "$2"
+}
+yoast_title separator sc-middot
+yoast_title title-tax-category '%%term_title%% articles %%sep%% %%sitename%%'
 
 wp eval-file /seed/content.php
 wp rewrite flush
