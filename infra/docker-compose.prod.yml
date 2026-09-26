@@ -1,0 +1,32 @@
+# Production overrides. Host nginx terminates TLS for both hosts and proxies to Caddy on
+# 127.0.0.1:8080 (see infra/nginx/tagline.conf). Enable with, in infra/.env:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml
+#   COMPOSE_PROFILES=
+name: tagline
+
+services:
+  # Standalone build, `node server.js`. Build it after WordPress is up and seeded:
+  #   docker compose build web && docker compose up -d web
+  web:
+    image: tagline-web
+    build:
+      context: ../web
+      args:
+        WP_GRAPHQL_URL: ${WP_GRAPHQL_URL}
+        SITE_URL: ${SITE_URL}
+    profiles: !reset []
+    command: !reset []
+    working_dir: /app
+    volumes: !reset []
+    environment:
+      NODE_ENV: production
+      IMAGES_ALLOW_LOCAL_IP: "false"
+      WATCHPACK_POLLING: "false"
+
+  caddy:
+    # Only nginx on the host talks to Caddy. Published ports bypass ufw, so bind to loopback.
+    ports: !override
+      - "127.0.0.1:8080:80"
+    # The public hostnames must resolve to the real (HTTPS) endpoints, not to Caddy.
+    networks: !reset
+      default: {}

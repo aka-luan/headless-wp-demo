@@ -1,8 +1,12 @@
-# Local dev serves plain HTTP on *.localhost. In production, drop the
-# "http://" prefixes and the global options so Caddy issues certificates.
+# Caddy serves plain HTTP in every environment. Locally it is the entry point on port 80;
+# in production host nginx terminates TLS and proxies here (infra/nginx/tagline.conf).
 {
 	auto_https off
 	admin off
+	servers {
+		# Keep nginx's X-Forwarded-For/-Proto, so WordPress sees HTTPS and Next sees the client IP.
+		trusted_proxies static private_ranges
+	}
 }
 
 http://{$CMS_HOST} {
